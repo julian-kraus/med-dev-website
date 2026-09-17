@@ -1,0 +1,43 @@
+import { CalendarDays } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { ButtonLink } from "../common/ButtonLink";
+import { siteLinks } from "../../content/siteLinks";
+
+const navItems = [
+  { href: "/", label: "Community", end: true },
+  { href: "/activity", label: "Activity" },
+  { href: "/inner-circle", label: "Inner Circle" },
+  { href: "/partners", label: "Partners" },
+  { href: "/team", label: "Team" },
+];
+
+export function Header() {
+  return (
+    <header className="header">
+      <NavLink className="header__brand" to="/" aria-label="med-dev home">
+        <img src="/assets/current-site/images/image02.png" alt="med-dev" />
+      </NavLink>
+      <nav className="header__nav" aria-label="Main navigation">
+        {navItems.map((item) => (
+          <NavLink
+            key={item.href}
+            to={item.href}
+            end={item.end}
+            className={({ isActive }) => (isActive ? "is-active" : undefined)}
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
+      <ButtonLink
+        href={siteLinks.whatsappInvite}
+        target="_blank"
+        rel="noreferrer"
+        className="header__cta"
+      >
+        <CalendarDays size={18} aria-hidden="true" />
+        Join WhatsApp
+      </ButtonLink>
+    </header>
+  );
+}
