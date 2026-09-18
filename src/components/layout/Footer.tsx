@@ -5,7 +5,14 @@ export function Footer() {
   return (
     <footer className="footer">
       <div>
-        <img src="/assets/current-site/images/image05.png" alt="med-dev" />
+        <img
+          src="/assets/current-site/images/image05.webp"
+          alt="med-dev"
+          width={400}
+          height={91}
+          loading="lazy"
+          decoding="async"
+        />
         <p>Healthcare. Technology. Innovation.</p>
       </div>
       <div className="footer__links">

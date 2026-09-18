@@ -9,7 +9,9 @@ const storyBlocks = [
     eyebrow: "The problem",
     title: "Health-tech disconnect - siloed expertise",
     text: "Medical and technical knowledge often live in separate rooms. Healthcare problems need domain insight, but technical teams need access to context, people, and real-world constraints to build useful solutions.",
-    image: "/assets/current-site/images/image11.jpg",
+    image: "/assets/current-site/images/image11.webp",
+    width: 1216,
+    height: 820,
     icon: CircleDot,
   },
   {
@@ -17,7 +19,9 @@ const storyBlocks = [
     eyebrow: "The solution",
     title: "Bridging the health-tech gap through collaboration",
     text: "med-dev creates space for dialogue, skill transfer, and interdisciplinary work between people who understand care delivery and people who can build, analyze, design, and scale technology.",
-    image: "/assets/current-site/images/image14.jpg",
+    image: "/assets/current-site/images/image14.webp",
+    width: 1216,
+    height: 876,
     icon: Network,
   },
 ];
@@ -62,7 +66,14 @@ export function CurrentStory({ variant = "full" }: { variant?: "preview" | "full
                   <Icon size={28} aria-hidden="true" />
                 </div>
                 <div className="story-band__image">
-                  <img src={block.image} alt="" />
+                  <img
+                    src={block.image}
+                    alt=""
+                    width={block.width}
+                    height={block.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               </div>
             </section>

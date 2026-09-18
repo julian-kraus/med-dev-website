@@ -8,7 +8,14 @@ export function Team() {
       <div className="team-grid">
         {teamMembers.map((member) => (
           <article className="team-member" key={member.id}>
-            <img src={member.image} alt={member.name} />
+            <img
+              src={member.image}
+              alt={member.name}
+              width={768}
+              height={768}
+              loading="lazy"
+              decoding="async"
+            />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
             <p className="team-member__bio">{member.bio}</p>
@@ -33,7 +40,14 @@ export function TeamPreview() {
       <div className="team-grid team-grid--preview">
         {teamMembers.slice(0, 3).map((member) => (
           <article className="team-member" key={member.id}>
-            <img src={member.image} alt={member.name} />
+            <img
+              src={member.image}
+              alt={member.name}
+              width={768}
+              height={768}
+              loading="lazy"
+              decoding="async"
+            />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
           </article>

@@ -74,7 +74,12 @@ export function Header() {
   return (
     <header className="header">
       <NavLink className="header__brand" to="/" aria-label="med-dev home">
-        <img src="/assets/current-site/images/image02.png" alt="med-dev" />
+        <img
+          src="/assets/current-site/images/image02.webp"
+          alt="med-dev"
+          width={400}
+          height={89}
+        />
       </NavLink>
       <nav className="header__nav" aria-label="Main navigation">
         {navItems.map((item) => (

@@ -35,7 +35,15 @@ export function Hero() {
         </a>
       </div>
       <div className="hero__media" aria-hidden="true">
-        <img src="/assets/current-site/images/image04.png" alt="" />
+        <img
+          src="/assets/current-site/images/image04.webp"
+          srcSet="/assets/current-site/images/image04-464.webp 464w, /assets/current-site/images/image04.webp 928w"
+          sizes="(max-width: 860px) 84vw, 29rem"
+          alt=""
+          width={928}
+          height={1040}
+          decoding="async"
+        />
       </div>
     </section>
   );
