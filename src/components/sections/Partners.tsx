@@ -28,20 +28,13 @@ export function Partners() {
 }
 
 export function PartnersPreview() {
-  const previewNames = partnerGroups.flatMap((group) => group.names).slice(0, 8);
-
   return (
     <Section
       id="partners"
       eyebrow="Collaborations"
       title="Connected to the health-tech ecosystem"
-      intro="A glimpse at companies, organizations, and communities connected to med-dev events and collaborations."
+      intro="med-dev has grown through company visits, research conversations, community partnerships, and shared health-tech events."
     >
-      <div className="logo-wall" aria-label="Selected collaborators">
-        {previewNames.map((partner) => (
-          <span key={partner}>{partner}</span>
-        ))}
-      </div>
       <div className="section-actions">
         <ButtonLink href="/partners" variant="secondary">
           See collaborators
