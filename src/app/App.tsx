@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { ErrorBoundary } from "../components/common/ErrorBoundary";
 import { Background } from "../components/layout/Background";
 import { CookieNotice } from "../components/layout/CookieNotice";
 import { Footer } from "../components/layout/Footer";
@@ -48,7 +49,7 @@ function DocumentMeta() {
 
 export function App() {
   return (
-    <>
+    <ErrorBoundary>
       <Background />
       <ScrollToRouteTarget />
       <DocumentMeta />
@@ -68,6 +69,6 @@ export function App() {
       </main>
       <Footer />
       <CookieNotice />
-    </>
+    </ErrorBoundary>
   );
 }

@@ -3,11 +3,30 @@ import { ButtonLink } from "../common/ButtonLink";
 
 const storageKey = "med-dev-cookie-notice";
 
+// Touching localStorage throws (rather than returning null) when site data is
+// blocked, so every access is guarded. A read failure shows the notice, which
+// is the safe default.
+function hasAccepted() {
+  try {
+    return window.localStorage.getItem(storageKey) === "accepted";
+  } catch {
+    return false;
+  }
+}
+
+function rememberAccepted() {
+  try {
+    window.localStorage.setItem(storageKey, "accepted");
+  } catch {
+    // Nothing to do: the notice reappears next visit, which is acceptable.
+  }
+}
+
 export function CookieNotice() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(window.localStorage.getItem(storageKey) !== "accepted");
+    setIsVisible(!hasAccepted());
   }, []);
 
   if (!isVisible) {
@@ -32,7 +51,7 @@ export function CookieNotice() {
           className="button-link button-link--primary"
           type="button"
           onClick={() => {
-            window.localStorage.setItem(storageKey, "accepted");
+            rememberAccepted();
             setIsVisible(false);
           }}
         >
