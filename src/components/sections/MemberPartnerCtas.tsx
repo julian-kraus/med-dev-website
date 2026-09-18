@@ -11,8 +11,8 @@ export function MemberPartnerCtas() {
           <p className="eyebrow">Become a member</p>
           <h2>Sounds interesting? Join us!</h2>
           <p>
-            Join the WhatsApp community to hear about events, introductions,
-            opportunities, and member-driven health-tech ideas.
+            Join the WhatsApp community to hear about events, introductions, opportunities, and
+            member-driven health-tech ideas.
           </p>
           <ButtonLink href={siteLinks.whatsappInvite} target="_blank" rel="noreferrer">
             Join us
@@ -23,8 +23,8 @@ export function MemberPartnerCtas() {
           <p className="eyebrow">Become a partner</p>
           <h2>Create the future of healthcare with us.</h2>
           <p>
-            Collaborate on talks, lab tours, hackathons, speaker formats, and
-            community events with the next generation of health tech leaders.
+            Collaborate on talks, lab tours, hackathons, speaker formats, and community events with
+            the next generation of health tech leaders.
           </p>
           <ButtonLink href="/#contact" variant="secondary">
             Get in touch

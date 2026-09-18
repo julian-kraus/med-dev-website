@@ -21,7 +21,12 @@ export function LumaCalendarEmbed() {
         />
       </div>
       <div className="section-actions">
-        <ButtonLink href={siteLinks.lumaProfile} target="_blank" rel="noreferrer" variant="secondary">
+        <ButtonLink
+          href={siteLinks.lumaProfile}
+          target="_blank"
+          rel="noreferrer"
+          variant="secondary"
+        >
           <ExternalLink size={18} aria-hidden="true" />
           See past hosted events
         </ButtonLink>

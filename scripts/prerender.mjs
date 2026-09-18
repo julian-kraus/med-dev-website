@@ -12,8 +12,15 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = join(root, "dist");
 const ssrEntry = pathToFileURL(join(root, ".prerender", "entry-server.js"));
 
-const { render, prerenderRoutes, redirectRoutes, routeMeta, siteOrigin, defaultOgImage, absoluteUrl } =
-  await import(ssrEntry.href);
+const {
+  render,
+  prerenderRoutes,
+  redirectRoutes,
+  routeMeta,
+  siteOrigin,
+  defaultOgImage,
+  absoluteUrl,
+} = await import(ssrEntry.href);
 
 // Read the template exactly once. Reading it back after writing "/" would make
 // every later route inherit the homepage's meta.

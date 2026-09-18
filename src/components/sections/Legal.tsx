@@ -28,10 +28,7 @@ function ImprintContent() {
           <dd>
             Phone: +49 1573 7261900
             <br />
-            Email:{" "}
-            <a href={`mailto:${siteLinks.contactEmail}`}>
-              {siteLinks.contactEmail}
-            </a>
+            Email: <a href={`mailto:${siteLinks.contactEmail}`}>{siteLinks.contactEmail}</a>
           </dd>
         </div>
         <div>
@@ -40,9 +37,8 @@ function ImprintContent() {
         </div>
       </dl>
       <p>
-        Liability for content and links follows the statutory rules. External
-        links are checked when added, but med-dev has no influence over future
-        third-party content.
+        Liability for content and links follows the statutory rules. External links are checked when
+        added, but med-dev has no influence over future third-party content.
       </p>
     </article>
   );
@@ -53,34 +49,27 @@ function PrivacyContent() {
     <article className="legal-card" id="privacy">
       <h3>Data privacy</h3>
       <p>
-        Controller for this website is Leonard Rinser, Keltenstr. 8, 86934
-        Reichling, Germany, reachable at{" "}
-        <a href={`mailto:${siteLinks.contactEmail}`}>{siteLinks.contactEmail}</a>.
+        Controller for this website is Leonard Rinser, Keltenstr. 8, 86934 Reichling, Germany,
+        reachable at <a href={`mailto:${siteLinks.contactEmail}`}>{siteLinks.contactEmail}</a>.
       </p>
       <p>
-        When you visit the site, technically necessary hosting and security data
-        can be processed by the website host so the page can be delivered.
-        This can include request metadata such as IP address, browser
-        information, requested URL, referrer, and timestamps.
+        When you visit the site, technically necessary hosting and security data can be processed by
+        the website host so the page can be delivered. This can include request metadata such as IP
+        address, browser information, requested URL, referrer, and timestamps.
+      </p>
+      <p>We do not use Google Analytics, Google AdSense, or Vercel Web Analytics.</p>
+      <p>
+        Upcoming events are embedded from the public med-dev Luma calendar. Event details,
+        registration, and attendance flows are handled by Luma.
       </p>
       <p>
-        We do not use Google Analytics, Google AdSense, or Vercel Web
-        Analytics.
+        Newsletter entries are loaded from the public med-dev Substack RSS feed through RSS2JSON,
+        similar to the current med-dev website. Clicking Substack, WhatsApp, LinkedIn, or Luma links
+        opens third-party services whose own privacy policies apply.
       </p>
       <p>
-        Upcoming events are embedded from the public med-dev Luma calendar.
-        Event details, registration, and attendance flows are handled by Luma.
-      </p>
-      <p>
-        Newsletter entries are loaded from the public med-dev Substack RSS feed
-        through RSS2JSON, similar to the current med-dev website. Clicking
-        Substack, WhatsApp, LinkedIn, or Luma links opens third-party services
-        whose own privacy policies apply.
-      </p>
-      <p>
-        Contact currently happens through email or linked services such as WhatsApp,
-        LinkedIn, Luma, and Substack. A dedicated website contact form is not
-        configured yet.
+        Contact currently happens through email or linked services such as WhatsApp, LinkedIn, Luma,
+        and Substack. A dedicated website contact form is not configured yet.
       </p>
     </article>
   );

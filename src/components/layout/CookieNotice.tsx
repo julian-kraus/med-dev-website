@@ -26,6 +26,11 @@ export function CookieNotice() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Deliberate: the prerendered HTML cannot know what this browser has
+    // stored, so the notice must start hidden and the real value has to be
+    // read after mount. Reading it during render would be a hydration
+    // mismatch. The one extra render is the cost of that correctness.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsVisible(!hasAccepted());
   }, []);
 
@@ -38,9 +43,8 @@ export function CookieNotice() {
       <div>
         <p className="eyebrow">Privacy</p>
         <p>
-          This site uses necessary local storage to remember this notice.
-          External services such as WhatsApp, LinkedIn, Substack, RSS2JSON,
-          and Luma are handled by those providers.
+          This site uses necessary local storage to remember this notice. External services such as
+          WhatsApp, LinkedIn, Substack, RSS2JSON, and Luma are handled by those providers.
         </p>
       </div>
       <div className="cookie-notice__actions">

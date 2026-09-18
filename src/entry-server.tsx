@@ -6,7 +6,13 @@ import { StaticRouter } from "react-router-dom";
 import { App } from "./app/App";
 
 export { appRoutes, prerenderRoutes } from "./app/routes";
-export { redirectRoutes, routeMeta, siteOrigin, defaultOgImage, absoluteUrl } from "./content/routeMeta";
+export {
+  redirectRoutes,
+  routeMeta,
+  siteOrigin,
+  defaultOgImage,
+  absoluteUrl,
+} from "./content/routeMeta";
 
 export function render(url: string) {
   return renderToString(

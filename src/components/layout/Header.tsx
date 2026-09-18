@@ -1,6 +1,6 @@
 import { CalendarDays, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ButtonLink } from "../common/ButtonLink";
 import { siteLinks } from "../../content/siteLinks";
 
@@ -16,13 +16,8 @@ const panelId = "header-mobile-nav";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { pathname } = useLocation();
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -74,12 +69,7 @@ export function Header() {
   return (
     <header className="header">
       <NavLink className="header__brand" to="/" aria-label="med-dev home">
-        <img
-          src="/assets/current-site/images/image02.webp"
-          alt="med-dev"
-          width={400}
-          height={89}
-        />
+        <img src="/assets/current-site/images/image02.webp" alt="med-dev" width={400} height={89} />
       </NavLink>
       <nav className="header__nav" aria-label="Main navigation">
         {navItems.map((item) => (
@@ -113,12 +103,7 @@ export function Header() {
       >
         {isMenuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
       </button>
-      <div
-        className="header__mobile-nav"
-        id={panelId}
-        ref={panelRef}
-        hidden={!isMenuOpen}
-      >
+      <div className="header__mobile-nav" id={panelId} ref={panelRef} hidden={!isMenuOpen}>
         <nav aria-label="Mobile navigation">
           {navItems.map((item) => (
             <NavLink
@@ -126,6 +111,7 @@ export function Header() {
               to={item.href}
               end={item.end}
               className={({ isActive }) => (isActive ? "is-active" : undefined)}
+              onClick={() => setIsMenuOpen(false)}
             >
               {item.label}
             </NavLink>

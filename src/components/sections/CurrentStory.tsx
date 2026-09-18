@@ -37,8 +37,8 @@ export function CurrentStory({ variant = "full" }: { variant?: "preview" | "full
       >
         <div className="statement-panel reveal">
           <p>
-            med-dev connects medical and tech enthusiasts and gives them the
-            resources to improve healthcare.
+            med-dev connects medical and tech enthusiasts and gives them the resources to improve
+            healthcare.
           </p>
         </div>
       </Section>
@@ -53,52 +53,55 @@ export function CurrentStory({ variant = "full" }: { variant?: "preview" | "full
         </section>
       ) : null}
 
-      {variant === "full" ? <div className="story-stack">
-        {storyBlocks.map((block, index) => {
-          const Icon = block.icon;
-          return (
-            <section className="story-band reveal" id={block.id} key={block.id}>
-              <div className={`story-band__inner ${index % 2 ? "is-reversed" : ""}`}>
-                <div className="story-band__copy">
-                  <p className="eyebrow">{block.eyebrow}</p>
-                  <h2>{block.title}</h2>
-                  <p>{block.text}</p>
-                  <Icon size={28} aria-hidden="true" />
+      {variant === "full" ? (
+        <div className="story-stack">
+          {storyBlocks.map((block, index) => {
+            const Icon = block.icon;
+            return (
+              <section className="story-band reveal" id={block.id} key={block.id}>
+                <div className={`story-band__inner ${index % 2 ? "is-reversed" : ""}`}>
+                  <div className="story-band__copy">
+                    <p className="eyebrow">{block.eyebrow}</p>
+                    <h2>{block.title}</h2>
+                    <p>{block.text}</p>
+                    <Icon size={28} aria-hidden="true" />
+                  </div>
+                  <div className="story-band__image">
+                    <img
+                      src={block.image}
+                      alt=""
+                      width={block.width}
+                      height={block.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
-                <div className="story-band__image">
-                  <img
-                    src={block.image}
-                    alt=""
-                    width={block.width}
-                    height={block.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            </section>
-          );
-        })}
-      </div> : null}
-
-      {variant === "full" ? <Section
-        id="mission"
-        eyebrow="Mission"
-        title="Uniting medical and tech enthusiasts."
-        intro="We provide the resources, formats, and community momentum that help people work on better healthcare."
-      >
-        <div className="mission-panel reveal">
-          <Target size={30} aria-hidden="true" />
-          <p>
-            From lab tours and technical talks to hackathons, journal clubs,
-            buddy formats, and member-led experiments, med-dev is built around
-            people who want to contribute.
-          </p>
-          <ButtonLink href={siteLinks.whatsappInvite} target="_blank" rel="noreferrer">
-            Join us <ArrowRight size={18} aria-hidden="true" />
-          </ButtonLink>
+              </section>
+            );
+          })}
         </div>
-      </Section> : null}
+      ) : null}
+
+      {variant === "full" ? (
+        <Section
+          id="mission"
+          eyebrow="Mission"
+          title="Uniting medical and tech enthusiasts."
+          intro="We provide the resources, formats, and community momentum that help people work on better healthcare."
+        >
+          <div className="mission-panel reveal">
+            <Target size={30} aria-hidden="true" />
+            <p>
+              From lab tours and technical talks to hackathons, journal clubs, buddy formats, and
+              member-led experiments, med-dev is built around people who want to contribute.
+            </p>
+            <ButtonLink href={siteLinks.whatsappInvite} target="_blank" rel="noreferrer">
+              Join us <ArrowRight size={18} aria-hidden="true" />
+            </ButtonLink>
+          </div>
+        </Section>
+      ) : null}
     </>
   );
 }

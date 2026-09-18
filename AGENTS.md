@@ -12,8 +12,8 @@ visitors.
 ## Product Direction
 
 - Make the website worth revisiting for existing WhatsApp/community members.
-- Give upcoming events and calendar access first-class visibility using the
-  public Google Calendar iCal feed.
+- Give upcoming events and calendar access first-class visibility through the
+  public Luma calendar embed.
 - Add a direct WhatsApp join button so new people can join without going through
   Notion first.
 - Make the Inner Circle program clear, concrete, and prominent.
@@ -37,13 +37,12 @@ visitors.
 - Treat external links, forms, calendar embeds, and newsletter links as tracked
   integration points that need QA before launch.
 - Keep copy and factual claims easy to update without editing layout code.
-- Filter internal/orga-only calendar events before rendering public event lists.
 
 ## Suggested Stack
 
 - React with TypeScript.
-- Vite for the initial build unless a future requirement needs a framework with
-  server rendering.
+- Vite. The build prerenders every route to static HTML with `react-dom/server`
+  (see `scripts/prerender.mjs`), so no server-rendering framework is needed.
 - CSS Modules, vanilla CSS, or Tailwind are all acceptable; pick one and use it
   consistently. If brand guidelines arrive as tokens, translate them into CSS
   custom properties.
@@ -56,25 +55,27 @@ visitors.
 ```text
 src/
   app/
-    App.tsx
-    routes.tsx
+    App.tsx           router shell, scroll handling
+    routes.tsx        the route table: path + element + metadata
+    main.tsx          client entry; hydrates prerendered HTML
+    useDocumentMeta.ts  keeps head tags right across client navigation
+  entry-server.tsx    prerender entry (imports App, never main.tsx)
   components/
     common/
     layout/
     sections/
   content/
-    events.ts
-    newsletters.ts
+    routeMeta.ts      titles, descriptions, robots per route
+    newsletterFeed.ts feed parsing helpers
     partners.ts
+    siteLinks.ts      every external URL and address
     team.ts
-    testimonials.ts
   styles/
-    tokens.css
     global.css
-  assets/
-    images/
-    logos/
-    brand/
+  __tests__/
+scripts/
+  prerender.mjs       writes dist/<route>/index.html, 404, sitemap, robots
+  optimize-assets.sh  one-off image/video conversion
 ```
 
 Keep docs in `docs/`. Keep public static files in `public/`.
@@ -86,14 +87,60 @@ Keep docs in `docs/`. Keep public static files in `public/`.
 - All buttons and links must have clear accessible labels.
 - Images need alt text unless purely decorative.
 - Calendar, WhatsApp, newsletter, contact, and legal links must be verified.
-- Calendar integration must handle the public Google Calendar iCal feed,
-  all-day events, timed events, HTML descriptions, and empty public event states.
+- Events come from an embedded public Luma calendar, not the Google Calendar
+  iCal feed the earlier drafts assumed.
 - Add tests for content helpers or filtering logic when those become non-trivial.
-- Run formatting, linting, type checks, and a production build before release.
+- Run `npm run format`, `npm run lint`, `npm test`, and `npm run build` before
+  release. All four must pass.
+
+## Routing And Metadata
+
+`src/app/routes.tsx` is the single source of truth. One array drives the
+router, the prerender list, the per-page head tags, and `sitemap.xml`. Adding a
+route there without a matching `src/content/routeMeta.ts` entry is a type error,
+and `src/__tests__/routes.test.ts` fails if the two ever drift.
+
+This matters because there is no SPA catch-all rewrite any more: the host serves
+one real file per route and returns a genuine 404 (`dist/404.html`) for anything
+else. A route in the router but missing from the route table would work in dev
+and 404 in production.
+
+Redirect-only paths (`/events`, `/newsletter`) must stay out of the route table.
+`<Navigate>` renders an empty string under `StaticRouter`, so prerendering one
+would ship a page that hydrates onto an empty root. They get 308s in
+`vercel.json` plus script-less meta-refresh stubs for hosts without redirects.
+
+## Assets
+
+Images are WebP at roughly 2x their CSS display size; the background video is
+re-encoded H.264. `scripts/optimize-assets.sh` documents the exact commands.
+It is **not** part of the build: run it by hand after adding or replacing an
+asset, commit the output, and delete the original. Every `<img>` needs explicit
+`width` and `height` so layout does not shift.
+
+`card.jpg` stays JPEG because some link unfurlers handle WebP Open Graph images
+poorly.
+
+## Known Tradeoffs
+
+- **rss2json**: newsletter posts come through the unauthenticated
+  `api.rss2json.com`, matching the current live site. It is rate limited per IP,
+  it is a single point of failure for that section, and visitor IPs reach a
+  third party. Replacing it would need a serverless function, which would end
+  GitHub Pages portability.
+- **GitHub Pages**: asset paths are hardcoded as `/assets/current-site/...`
+  strings that Vite never rewrites, and canonicals are absolute against
+  `siteOrigin`. GitHub Pages is therefore only viable on an apex or custom
+  domain, not a `user.github.io/repo/` project page.
+- **Scroll-driven reveal**: `.reveal` uses `animation-timeline: view()`, which
+  Firefox still keeps behind a flag. There it degrades to one fade-up on load.
+  Deliberate, not a bug.
+- **`/community`** is reachable only from body CTAs, not the nav, and overlaps
+  the homepage. It is prerendered and indexable; either link it from the nav or
+  point its canonical at `/`.
 
 ## Current Known Issues To Fix
 
-- Current image clicks can send visitors to the top of the page.
 - Newsletter content is too buried.
 - Inner Circle explanation is not clear/prominent enough.
 - Past partners/collaborations are not visible enough.

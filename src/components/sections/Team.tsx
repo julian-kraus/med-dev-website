@@ -19,7 +19,12 @@ export function Team() {
             <h3>{member.name}</h3>
             <p>{member.role}</p>
             <p className="team-member__bio">{member.bio}</p>
-            <a href={member.linkedin} target="_blank" rel="noreferrer" aria-label={`${member.name} on LinkedIn`}>
+            <a
+              href={member.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${member.name} on LinkedIn`}
+            >
               LinkedIn
             </a>
           </article>

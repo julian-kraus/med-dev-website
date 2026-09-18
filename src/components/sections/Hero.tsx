@@ -8,20 +8,13 @@ export function Hero() {
       <div className="hero__copy">
         <p className="eyebrow">Munich health-tech community</p>
         <h1>Building a new era in health-tech innovation, together.</h1>
-        <p>
-          Envisioning a new era in health innovation empowered by boundless
-          collaboration.
-        </p>
+        <p>Envisioning a new era in health innovation empowered by boundless collaboration.</p>
         <p className="hero__clarifier">
-          A Munich-based community for people working across medicine,
-          technology, research, startups, and healthcare innovation.
+          A Munich-based community for people working across medicine, technology, research,
+          startups, and healthcare innovation.
         </p>
         <div className="hero__actions">
-          <ButtonLink
-            href={siteLinks.whatsappInvite}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <ButtonLink href={siteLinks.whatsappInvite} target="_blank" rel="noreferrer">
             <MessageCircle size={19} aria-hidden="true" />
             Join WhatsApp
           </ButtonLink>
