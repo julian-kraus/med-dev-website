@@ -39,3 +39,6 @@ Thumbs.db
 .parcel-cache/
 
 .vercel
+
+# Prerender SSR bundle (dist/ above does not match this)
+.prerender/

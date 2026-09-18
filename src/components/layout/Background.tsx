@@ -5,14 +5,12 @@ import { useEffect, useState } from "react";
 // for reduced motion. Everywhere else the poster carries the same look.
 const videoQuery = "(min-width: 861px) and (prefers-reduced-motion: no-preference)";
 
-function shouldPlayVideo() {
-  return typeof window !== "undefined" && typeof window.matchMedia === "function"
-    ? window.matchMedia(videoQuery).matches
-    : false;
-}
-
 export function Background() {
-  const [playVideo, setPlayVideo] = useState(shouldPlayVideo);
+  // Always start on the poster, matching what the prerendered HTML contains.
+  // Deciding here with matchMedia would render <video> on a wide client while
+  // the server rendered <img>, which is a hydration mismatch. The effect flips
+  // it immediately after, which also keeps the video off the critical path.
+  const [playVideo, setPlayVideo] = useState(false);
 
   useEffect(() => {
     const query = window.matchMedia(videoQuery);
