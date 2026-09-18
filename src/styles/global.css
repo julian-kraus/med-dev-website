@@ -138,6 +138,29 @@ h3 {
   color: var(--color-brand);
 }
 
+.header__menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.85rem;
+  height: 2.85rem;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 0.35rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.header__menu-toggle:hover {
+  border-color: rgba(2, 226, 179, 0.5);
+  color: var(--color-brand);
+}
+
+.header__mobile-nav {
+  display: none;
+}
+
 .button-link {
   display: inline-flex;
   align-items: center;
@@ -1001,11 +1024,46 @@ h3 {
 
 @media (max-width: 860px) {
   .header {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.6rem;
   }
 
   .header__nav {
     display: none;
+  }
+
+  .header__menu-toggle {
+    display: inline-flex;
+  }
+
+  /* [hidden] on the panel handles the closed state; this only sets layout. */
+  .header__mobile-nav:not([hidden]) {
+    display: grid;
+    grid-column: 1 / -1;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: var(--color-surface-strong);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .header__mobile-nav nav {
+    display: grid;
+  }
+
+  .header__mobile-nav nav a {
+    padding: 0.85rem 0.5rem;
+    border-radius: 0.35rem;
+    color: var(--color-soft);
+    font-size: 1rem;
+  }
+
+  .header__mobile-nav nav a:hover,
+  .header__mobile-nav nav a.is-active {
+    background: rgba(2, 226, 179, 0.08);
+    color: var(--color-brand);
   }
 
   .hero {
