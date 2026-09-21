@@ -79,7 +79,8 @@ scripts/
   optimize-assets.sh  one-off image/video conversion
 ```
 
-Keep docs in `docs/`. Keep public static files in `public/`.
+Keep public static files in `public/`. Human-facing setup notes go in
+`README.md`; this file holds the contracts and tradeoffs.
 
 ## Quality Bar
 
@@ -129,20 +130,22 @@ poorly.
   it is a single point of failure for that section, and visitor IPs reach a
   third party. Replacing it would need a serverless function, which would end
   GitHub Pages portability.
-- **GitHub Pages is the deploy target** (`.github/workflows/deploy.yml`), on the
-  custom domain `www.med-dev.org`. It must stay a custom domain: asset paths are
-  hardcoded `/assets/...` strings that Vite never rewrites, and canonicals are
-  absolute against `siteOrigin`, so a `user.github.io/repo/` project page would
-  break every image and every canonical.
+- **GitHub Pages is the deploy target** (`.github/workflows/deploy.yml`),
+  currently as a project page at a repo subpath. The build is base-aware:
+  `VITE_BASE`, `VITE_SITE_ORIGIN` and `VITE_NOINDEX` drive it, every asset URL
+  goes through `asset()` in `src/content/assets.ts`, and both routers take a
+  basename. Never hardcode an absolute `/assets/...` path again — it will break
+  the subpath build silently. README.md has the steps to move to the custom
+  domain.
 - **Pages cannot set response headers.** That is why the CSP and referrer policy
-  live as `<meta>` tags in `index.html` rather than in `vercel.json` — put new
-  policy there, not in the header config. Two things are unavoidably lost:
+  live as `<meta>` tags in `index.html` — that is the only place policy belongs.
+  Two things are unavoidably lost:
   `X-Frame-Options`/`frame-ancestors` and `X-Content-Type-Options`, both
   header-only. Caching is fixed at `max-age=600` for everything, including the
   content-hashed `/build` output.
-- **`vercel.json` is inert on Pages.** It is kept so a move back to Vercel stays
-  a one-step change. It deliberately holds no CSP: the meta tag is the single
-  definition.
+- **`vercel.json` is gitignored, not deleted.** It stays on maintainers'
+  machines so a move back to Vercel is one step, but it is untracked: a header
+  config in the repo would be misread as live when Pages cannot serve headers.
 - **Canonicals use the trailing-slash form** (`/team/`), because Pages 301s
   `/team` to `/team/`. `canonicalPath()` in `routeMeta.ts` is the one place that
   decides this, and `routes.test.ts` covers it. If the host ever changes to one
