@@ -58,6 +58,14 @@ video {
   max-width: 100%;
 }
 
+/* The width/height attributes on every <img> are presentational hints for BOTH
+   dimensions. Without this, CSS that sets only the width leaves the height
+   pinned to the attribute and the image stretches. Rules that deliberately set
+   a height (.site-background img, .pillar-layout__image img) out-specify it. */
+img {
+  height: auto;
+}
+
 h1,
 h2,
 h3,
