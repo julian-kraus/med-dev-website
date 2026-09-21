@@ -4,12 +4,23 @@ import { ButtonLink } from "../common/ButtonLink";
 import { Section } from "../common/Section";
 import { siteLinks } from "../../content/siteLinks";
 
-function ClosedPanel({ children, aside }: { children: ReactNode; aside: ReactNode }) {
+function ClosedPanel({
+  heading,
+  children,
+  aside,
+}: {
+  heading: string;
+  children: ReactNode;
+  aside: ReactNode;
+}) {
   return (
     <div className="split-panel">
       <div>
         <Sparkles size={26} aria-hidden="true" />
-        <h3>Applications are currently closed</h3>
+        {/* The closed window is a status, not the headline: leading with it
+            made the page's first line a door in the face. */}
+        <p className="status-line">Applications are currently closed</p>
+        <h3>{heading}</h3>
         {children}
       </div>
       <div className="status-box">{aside}</div>
@@ -20,7 +31,23 @@ function ClosedPanel({ children, aside }: { children: ReactNode; aside: ReactNod
 export function InnerCircle() {
   return (
     <Section id="inner-circle" className="section--content-only">
+      <figure className="photo-band reveal">
+        <img
+          src="/assets/images/inner-circle.webp"
+          srcSet="/assets/images/inner-circle-800.webp 800w, /assets/images/inner-circle.webp 1600w"
+          sizes="(max-width: 860px) calc(100vw - 2rem), 68rem"
+          alt="A dozen med-dev members around a long table at a traditional Munich pub."
+          width={1600}
+          height={1120}
+          // Not lazy: on a laptop this sits right at the fold and is very
+          // likely the LCP element, so deferring it would only hurt.
+          decoding="async"
+        />
+        <figcaption>A med-dev community evening in Munich.</figcaption>
+      </figure>
+
       <ClosedPanel
+        heading="What Inner Circle members do"
         aside={
           <>
             <Users size={24} aria-hidden="true" />
@@ -67,6 +94,7 @@ export function InnerCirclePreview() {
       intro="The application window is currently closed, but the program remains a clear path for people who want to organize events, publish ideas, and shape med-dev more actively."
     >
       <ClosedPanel
+        heading="A closer circle inside the community"
         aside={
           <>
             <ButtonLink href="/inner-circle">Learn about Inner Circle</ButtonLink>

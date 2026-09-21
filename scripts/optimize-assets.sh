@@ -38,6 +38,7 @@ webp_targets=(
   "image10.jpg:768"   # team grid
   "image02.png:400"   # header logo, 9rem
   "image05.png:400"   # footer logo
+  "inner-circle.jpg:1600"  # inner circle photo band, .section__inner caps at 68rem
 )
 
 for target in "${webp_targets[@]}"; do
@@ -60,32 +61,52 @@ if [ -f "$IMAGES/image04.webp" ] && [ ! -f "$IMAGES/image04-464.webp" ]; then
   cwebp -quiet -q 80 -resize 464 0 "$IMAGES/image04.webp" -o "$IMAGES/image04-464.webp"
 fi
 
+# The inner circle photo spans the full content column, so phones would
+# otherwise download the 1600w source for a ~350px slot.
+if [ -f "$IMAGES/inner-circle.webp" ] && [ ! -f "$IMAGES/inner-circle-800.webp" ]; then
+  cwebp -quiet -q 80 -resize 800 0 "$IMAGES/inner-circle.webp" -o "$IMAGES/inner-circle-800.webp"
+fi
+
+# It is also the og:image for /inner-circle, and that has to be JPEG for the
+# same reason card.jpg is: some link unfurlers handle WebP poorly.
+if [ -f "$IMAGES/inner-circle.webp" ] && [ ! -f "$IMAGES/inner-circle-og.jpg" ]; then
+  ffmpeg -v error -y -i "$IMAGES/inner-circle.webp" -vf scale=1200:-2 -q:v 5 "$IMAGES/inner-circle-og.jpg"
+fi
+
 # card.jpg is the Open Graph image and stays JPEG: several link unfurlers still
-# handle WebP poorly. Re-encode in place at quality 82.
-if [ -f "$IMAGES/card.jpg" ]; then
-  ffmpeg -v error -y -i "$IMAGES/card.jpg" -q:v 5 "$IMAGES/card.opt.jpg"
-  mv "$IMAGES/card.opt.jpg" "$IMAGES/card.jpg"
+# handle WebP poorly. Re-encoding in place would be lossy on every run, so it
+# only happens when an unoptimised card-source.jpg is dropped in.
+if [ -f "$IMAGES/card-source.jpg" ]; then
+  ffmpeg -v error -y -i "$IMAGES/card-source.jpg" -q:v 5 "$IMAGES/card.jpg"
+  rm "$IMAGES/card-source.jpg"
 fi
 
 # Background video: 1280x720 source, no audio track, sitting behind a 76% black
 # overlay, so it tolerates a low bitrate. 960w is smaller but bands on large
 # displays. -an drops the (already absent) audio stream explicitly.
-if [ -f "$VIDEOS/bg.mp4" ] && [ ! -f "$VIDEOS/bg-opt.mp4" ]; then
-  ffmpeg -v error -y -i "$VIDEOS/bg.mp4" \
+#
+# Keyed off bg-source.mp4, not bg.mp4: re-encoding the output would lose a
+# generation of quality on every run.
+if [ -f "$VIDEOS/bg-source.mp4" ]; then
+  ffmpeg -v error -y -i "$VIDEOS/bg-source.mp4" \
     -an -vf "scale=1280:-2,fps=24" \
     -c:v libx264 -crf 34 -preset slow -pix_fmt yuv420p \
     -movflags +faststart \
-    "$VIDEOS/bg-opt.mp4"
+    "$VIDEOS/bg.mp4"
   printf '%-16s %6s KB -> %5s KB\n' "bg.mp4" \
-    "$(( $(stat -f%z "$VIDEOS/bg.mp4") / 1024 ))" \
-    "$(( $(stat -f%z "$VIDEOS/bg-opt.mp4") / 1024 ))"
-  mv "$VIDEOS/bg-opt.mp4" "$VIDEOS/bg.mp4"
+    "$(( $(stat -f%z "$VIDEOS/bg-source.mp4") / 1024 ))" \
+    "$(( $(stat -f%z "$VIDEOS/bg.mp4") / 1024 ))"
+  rm "$VIDEOS/bg-source.mp4"
 fi
 
 # The video poster is shown on its own below 860px and under reduced motion.
+# Regenerated only when a fresh bg.mp4.jpg is dropped in.
 if [ -f "$VIDEOS/bg.mp4.jpg" ]; then
   cwebp -quiet -q 78 -resize 1280 0 "$VIDEOS/bg.mp4.jpg" -o "$VIDEOS/bg-poster.webp"
   rm "$VIDEOS/bg.mp4.jpg"
 fi
+
+echo "note: conversions are keyed off *-source files and are skipped once done;"
+echo "      drop a new source file in to regenerate a given asset."
 
 echo "done"

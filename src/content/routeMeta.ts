@@ -47,6 +47,8 @@ export const routeMeta = {
     title: "Inner Circle | med-dev",
     description:
       "A half-year program for med-dev members who want to organize events, build projects, write health-tech content, and connect more deeply with the Munich ecosystem.",
+    // JPEG, not the WebP the page itself uses: same reason card.jpg is JPEG.
+    ogImage: "/assets/images/inner-circle-og.jpg",
   },
   "/partners": {
     title: "Partners and collaborators | med-dev",
