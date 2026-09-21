@@ -31,13 +31,13 @@ export function Background() {
           muted
           playsInline
           preload="metadata"
-          poster="/assets/current-site/videos/bg-poster.webp"
+          poster="/assets/videos/bg-poster.webp"
         >
-          <source src="/assets/current-site/videos/bg.mp4" type="video/mp4" />
+          <source src="/assets/videos/bg.mp4" type="video/mp4" />
         </video>
       ) : (
         <img
-          src="/assets/current-site/videos/bg-poster.webp"
+          src="/assets/videos/bg-poster.webp"
           alt=""
           width={1280}
           height={720}

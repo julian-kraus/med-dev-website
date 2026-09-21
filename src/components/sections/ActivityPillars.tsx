@@ -36,7 +36,7 @@ export function ActivityPillars() {
       <div className="pillar-layout reveal">
         <div className="pillar-layout__image">
           <img
-            src="/assets/current-site/images/image13.webp"
+            src="/assets/images/image13.webp"
             alt=""
             width={1100}
             height={738}

@@ -29,8 +29,9 @@ visitors.
 - Keep sections reusable, but avoid abstracting before there is real repetition.
 - Build accessible semantic HTML first; layer animation and polish after content
   and responsive layout are correct.
-- Use the downloaded current-site assets in `public/assets/current-site/` for
-  parity work. Avoid decorative placeholder-heavy pages.
+- Site assets live in `public/assets/{images,videos}` and are served from
+  `/assets/...`. Vite's content-hashed bundle output goes to `/build/...`;
+  only that is cached immutably. Avoid decorative placeholder-heavy pages.
 - Do not make clickable images navigate to the top of the page. If current image
   styling needs to be preserved, implement it with non-link image wrappers unless
   there is a real destination.
@@ -128,7 +129,7 @@ poorly.
   it is a single point of failure for that section, and visitor IPs reach a
   third party. Replacing it would need a serverless function, which would end
   GitHub Pages portability.
-- **GitHub Pages**: asset paths are hardcoded as `/assets/current-site/...`
+- **GitHub Pages**: asset paths are hardcoded as `/assets/...`
   strings that Vite never rewrites, and canonicals are absolute against
   `siteOrigin`. GitHub Pages is therefore only viable on an apex or custom
   domain, not a `user.github.io/repo/` project page.

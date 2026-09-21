@@ -15,7 +15,7 @@ export type RouteMeta = {
 
 export const siteOrigin = "https://www.med-dev.org";
 
-export const defaultOgImage = "/assets/current-site/images/card.jpg";
+export const defaultOgImage = "/assets/images/card.jpg";
 
 export function absoluteUrl(pathOrUrl: string) {
   return pathOrUrl.startsWith("http") ? pathOrUrl : `${siteOrigin}${pathOrUrl}`;

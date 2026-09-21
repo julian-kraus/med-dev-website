@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="footer">
       <div>
         <img
-          src="/assets/current-site/images/image05.webp"
+          src="/assets/images/image05.webp"
           alt="med-dev"
           width={400}
           height={91}

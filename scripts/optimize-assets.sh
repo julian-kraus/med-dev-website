@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# One-off optimisation of the assets in public/assets/current-site/.
+# One-off optimisation of the assets in public/assets/.
 #
 # The originals were downloaded from the current med-dev.org site at full
 # resolution: the hero PNG alone was 2047x2292 / 2.9 MB for a slot the CSS caps
@@ -17,8 +17,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-IMAGES="public/assets/current-site/images"
-VIDEOS="public/assets/current-site/videos"
+IMAGES="public/assets/images"
+VIDEOS="public/assets/videos"
 
 for tool in cwebp ffmpeg; do
   command -v "$tool" >/dev/null || { echo "missing required tool: $tool" >&2; exit 1; }
