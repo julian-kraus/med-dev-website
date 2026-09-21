@@ -13,12 +13,26 @@ export type RouteMeta = {
   noindex?: boolean;
 };
 
-export const siteOrigin = "https://www.med-dev.org";
+// Overridable so a preview deploy can advertise its own origin instead of
+// claiming to be the production site.
+export const siteOrigin = import.meta.env.VITE_SITE_ORIGIN || "https://www.med-dev.org";
+
+/**
+ * True for any build that is not the real production site. A preview served
+ * from a public URL must not be indexed, or it competes with med-dev.org for
+ * its own content.
+ */
+export const noindexSite = import.meta.env.VITE_NOINDEX === "true";
 
 export const defaultOgImage = "/assets/images/card.jpg";
 
+/** Absolute URL, accounting for both the origin and any subpath base. */
 export function absoluteUrl(pathOrUrl: string) {
-  return pathOrUrl.startsWith("http") ? pathOrUrl : `${siteOrigin}${pathOrUrl}`;
+  if (pathOrUrl.startsWith("http")) {
+    return pathOrUrl;
+  }
+  const base = import.meta.env.BASE_URL;
+  return `${siteOrigin}${base}${pathOrUrl.replace(/^\//, "")}`;
 }
 
 /** "/team/" and "/team" are the same route; route lookups use the un-slashed form. */

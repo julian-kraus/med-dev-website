@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ButtonLink } from "../common/ButtonLink";
 import { siteLinks } from "../../content/siteLinks";
+import { asset } from "../../content/assets";
 
 const navItems = [
   { href: "/", label: "Community", end: true },
@@ -69,7 +70,7 @@ export function Header() {
   return (
     <header className="header">
       <NavLink className="header__brand" to="/" aria-label="med-dev home">
-        <img src="/assets/images/image02.webp" alt="med-dev" width={400} height={89} />
+        <img src={asset("/assets/images/image02.webp")} alt="med-dev" width={400} height={89} />
       </NavLink>
       <nav className="header__nav" aria-label="Main navigation">
         {navItems.map((item) => (

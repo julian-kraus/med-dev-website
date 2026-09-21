@@ -4,6 +4,7 @@ import {
   absoluteUrl,
   canonicalPath,
   defaultOgImage,
+  noindexSite,
   normalizePath,
   routeMeta,
   type RouteMeta,
@@ -46,7 +47,7 @@ export function applyRouteMeta(pathname: string, meta: RouteMeta) {
 
   document.title = meta.title;
   upsertMeta("name", "description", meta.description);
-  upsertMeta("name", "robots", meta.noindex ? "noindex, follow" : "index, follow");
+  upsertMeta("name", "robots", meta.noindex || noindexSite ? "noindex, follow" : "index, follow");
   upsertMeta("property", "og:title", meta.title);
   upsertMeta("property", "og:description", meta.description);
   upsertMeta("property", "og:image", image);

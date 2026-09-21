@@ -1,6 +1,7 @@
 import { BookOpen, FlaskConical, Hammer, MapPinned } from "lucide-react";
 import { ButtonLink } from "../common/ButtonLink";
 import { Section } from "../common/Section";
+import { asset } from "../../content/assets";
 
 const pillars = [
   {
@@ -36,7 +37,7 @@ export function ActivityPillars() {
       <div className="pillar-layout reveal">
         <div className="pillar-layout__image">
           <img
-            src="/assets/images/image13.webp"
+            src={asset("/assets/images/image13.webp")}
             alt=""
             width={1100}
             height={738}

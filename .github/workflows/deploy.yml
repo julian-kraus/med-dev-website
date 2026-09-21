@@ -34,7 +34,20 @@ jobs:
       # A broken build must not reach the live site.
       - run: npm run lint
       - run: npm test
+
+      # This deploys to a GitHub Pages *project* page, so the site lives at
+      # /<repo>/ rather than a domain root, and every URL is built against
+      # BASE_URL. NOINDEX keeps this preview out of search results so it never
+      # competes with the real site.
+      #
+      # To move to the custom domain: drop these three env vars, add a
+      # public/CNAME holding the domain, and point DNS at GitHub. Nothing else
+      # in the codebase changes.
       - run: npm run build
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
+          VITE_NOINDEX: "true"
 
       - uses: actions/configure-pages@v5
 

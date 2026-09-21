@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { asset } from "../../content/assets";
 
 // The video is decorative and costs ~840 KB, so it is only fetched where it is
 // actually worth it: wide viewports, and only when the visitor has not asked
@@ -31,13 +32,13 @@ export function Background() {
           muted
           playsInline
           preload="metadata"
-          poster="/assets/videos/bg-poster.webp"
+          poster={asset("/assets/videos/bg-poster.webp")}
         >
-          <source src="/assets/videos/bg.mp4" type="video/mp4" />
+          <source src={asset("/assets/videos/bg.mp4")} type="video/mp4" />
         </video>
       ) : (
         <img
-          src="/assets/videos/bg-poster.webp"
+          src={asset("/assets/videos/bg-poster.webp")}
           alt=""
           width={1280}
           height={720}

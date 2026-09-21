@@ -2,6 +2,7 @@ import { ArrowRight, CircleDot, Network, Target } from "lucide-react";
 import { ButtonLink } from "../common/ButtonLink";
 import { Section } from "../common/Section";
 import { siteLinks } from "../../content/siteLinks";
+import { asset } from "../../content/assets";
 
 const storyBlocks = [
   {
@@ -9,7 +10,7 @@ const storyBlocks = [
     eyebrow: "The problem",
     title: "Health-tech disconnect - siloed expertise",
     text: "Medical and technical knowledge often live in separate rooms. Healthcare problems need domain insight, but technical teams need access to context, people, and real-world constraints to build useful solutions.",
-    image: "/assets/images/image11.webp",
+    image: asset("/assets/images/image11.webp"),
     width: 1216,
     height: 820,
     icon: CircleDot,
@@ -19,7 +20,7 @@ const storyBlocks = [
     eyebrow: "The solution",
     title: "Bridging the health-tech gap through collaboration",
     text: "med-dev creates space for dialogue, skill transfer, and interdisciplinary work between people who understand care delivery and people who can build, analyze, design, and scale technology.",
-    image: "/assets/images/image14.webp",
+    image: asset("/assets/images/image14.webp"),
     width: 1216,
     height: 876,
     icon: Network,

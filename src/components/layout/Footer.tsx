@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { siteLinks } from "../../content/siteLinks";
+import { asset } from "../../content/assets";
 
 export function Footer() {
   return (
     <footer className="footer">
       <div>
         <img
-          src="/assets/images/image05.webp"
+          src={asset("/assets/images/image05.webp")}
           alt="med-dev"
           width={400}
           height={91}

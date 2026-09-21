@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ButtonLink } from "../common/ButtonLink";
 import { Section } from "../common/Section";
 import { siteLinks } from "../../content/siteLinks";
+import { asset, assetSrcSet } from "../../content/assets";
 
 function ClosedPanel({
   heading,
@@ -33,8 +34,11 @@ export function InnerCircle() {
     <Section id="inner-circle" className="section--content-only">
       <figure className="photo-band reveal">
         <img
-          src="/assets/images/inner-circle.webp"
-          srcSet="/assets/images/inner-circle-800.webp 800w, /assets/images/inner-circle.webp 1600w"
+          src={asset("/assets/images/inner-circle.webp")}
+          srcSet={assetSrcSet([
+            ["/assets/images/inner-circle-800.webp", "800w"],
+            ["/assets/images/inner-circle.webp", "1600w"],
+          ])}
           sizes="(max-width: 860px) calc(100vw - 2rem), 68rem"
           alt="A dozen med-dev members around a long table at a traditional Munich pub."
           width={1600}

@@ -1,6 +1,7 @@
 import { ArrowRight, CalendarDays, MessageCircle } from "lucide-react";
 import { ButtonLink } from "../common/ButtonLink";
 import { siteLinks } from "../../content/siteLinks";
+import { asset, assetSrcSet } from "../../content/assets";
 
 export function Hero() {
   return (
@@ -29,8 +30,11 @@ export function Hero() {
       </div>
       <div className="hero__media" aria-hidden="true">
         <img
-          src="/assets/images/image04.webp"
-          srcSet="/assets/images/image04-464.webp 464w, /assets/images/image04.webp 928w"
+          src={asset("/assets/images/image04.webp")}
+          srcSet={assetSrcSet([
+            ["/assets/images/image04-464.webp", "464w"],
+            ["/assets/images/image04.webp", "928w"],
+          ])}
           sizes="(max-width: 860px) 84vw, 29rem"
           alt=""
           width={928}

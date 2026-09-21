@@ -21,6 +21,7 @@ const {
   defaultOgImage,
   absoluteUrl,
   canonicalPath,
+  noindexSite,
 } = await import(ssrEntry.href);
 
 // Read the template exactly once. Reading it back after writing "/" would make
@@ -45,7 +46,7 @@ function headTags(pathname, meta) {
 
   return [
     `<meta name="description" content="${escapeAttr(meta.description)}" />`,
-    `<meta name="robots" content="${meta.noindex ? "noindex, follow" : "index, follow"}" />`,
+    `<meta name="robots" content="${meta.noindex || noindexSite ? "noindex, follow" : "index, follow"}" />`,
     `<link rel="canonical" href="${escapeAttr(url)}" />`,
     `<meta property="og:title" content="${escapeAttr(meta.title)}" />`,
     `<meta property="og:description" content="${escapeAttr(meta.description)}" />`,
@@ -110,18 +111,20 @@ written.push(["/404.html", notFoundHtml.length]);
 // wins and these are never served; on GitHub Pages, which has no redirect
 // mechanism, they are the only thing that works.
 for (const [from, to] of Object.entries(redirectRoutes)) {
-  const target = absoluteUrl(to);
+  // Absolute, so the stub is correct whether the site is served from a domain
+  // root or a repo subpath.
+  const target = absoluteUrl(canonicalPath(to));
   const stub = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url=${to}" />
+    <meta http-equiv="refresh" content="0; url=${target}" />
     <link rel="canonical" href="${target}" />
     <meta name="robots" content="noindex, follow" />
     <title>Redirecting to ${to}</title>
   </head>
   <body>
-    <p>This page has moved to <a href="${to}">${to}</a>.</p>
+    <p>This page has moved to <a href="${target}">${to}</a>.</p>
   </body>
 </html>
 `;
@@ -139,9 +142,13 @@ ${indexable.map((route) => `  <url><loc>${absoluteUrl(canonicalPath(route.path))
 `;
 await writeFile(join(distDir, "sitemap.xml"), sitemap, "utf8");
 
+// A preview deploy is publicly reachable, so it must be excluded outright or
+// it competes with the real site for its own content.
 await writeFile(
   join(distDir, "robots.txt"),
-  `User-agent: *\nAllow: /\n\nSitemap: ${siteOrigin}/sitemap.xml\n`,
+  noindexSite
+    ? `User-agent: *\nDisallow: /\n`
+    : `User-agent: *\nAllow: /\n\nSitemap: ${absoluteUrl("/sitemap.xml")}\n`,
   "utf8",
 );
 
