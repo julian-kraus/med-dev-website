@@ -58,8 +58,8 @@ function PrivacyContent() {
       </p>
       <p>We do not use Google Analytics, Google AdSense, or Vercel Web Analytics.</p>
       <p>
-        Fonts are loaded from Google Fonts (fonts.googleapis.com and fonts.gstatic.com) on every
-        page view. Your IP address and browser information are transmitted to Google in the process.
+        Fonts are served from this website itself. No request goes to Google Fonts, and no font
+        request transmits your IP address to a third party.
       </p>
       <p>
         Upcoming events are embedded from the public med-dev Luma calendar, so your browser loads

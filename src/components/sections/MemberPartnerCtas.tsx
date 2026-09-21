@@ -11,7 +11,7 @@ export function MemberPartnerCtas() {
           <p className="eyebrow">Become a member</p>
           <h2>Sounds interesting? Join us!</h2>
           <p>
-            Join the WhatsApp community to hear about events, introductions, opportunities, and
+            Join the WhatsApp community to hear about events, introductions, internships, and
             member-driven health-tech ideas.
           </p>
           <ButtonLink href={siteLinks.whatsappInvite} target="_blank" rel="noreferrer">

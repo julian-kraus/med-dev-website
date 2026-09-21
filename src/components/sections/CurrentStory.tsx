@@ -32,7 +32,11 @@ export function CurrentStory({ variant = "full" }: { variant?: "preview" | "full
     <>
       {/* No section intro on purpose: the panel below says the same thing,
           at display size, and the two used to sit one under the other. */}
-      <Section id="approach" eyebrow="Approach" title="Where medicine and technology actually meet">
+      <Section
+        id="approach"
+        eyebrow="Approach"
+        title="For the next generation of interdisciplinary health-tech experts"
+      >
         <div className="statement-panel reveal">
           <p>
             med-dev connects medical and tech enthusiasts and gives them the resources to improve

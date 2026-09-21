@@ -32,7 +32,7 @@ export function ActivityPillars() {
       id="activities"
       eyebrow="What we do"
       title="Community formats that make collaboration practical"
-      intro="Hands-on formats, peer learning, tours, and discussions help members move from interest to actual collaboration."
+      intro="Medical students, doctors, engineers, founders, researchers, designers, and product people meet here. Members can also propose their own tours, talks, and projects."
     >
       <div className="pillar-layout reveal">
         <div className="pillar-layout__image">

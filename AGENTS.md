@@ -18,6 +18,14 @@ and adding one is a significant decision (see Tradeoffs).
 - **React 18 + TypeScript + Vite.** No SSR framework: the build prerenders every
   route to static HTML with `react-dom/server` (`scripts/prerender.mjs`), which
   gets the SEO and link-preview benefits without the framework.
+- **Inter, self-hosted.** `src/assets/fonts/`, one variable WOFF2 per subset
+  (latin, latin-ext) covering weights 100-700, declared at the top of
+  `global.css`. Hotlinking Google Fonts sends every visitor's IP to Google,
+  which is the German Abmahnung fact pattern (LG München I, 20.01.2022,
+  Az. 3 O 17493/20); the imprint names a private individual, so that risk is
+  real here. The files live under `src/assets` rather than `public/` so Vite
+  rewrites their URLs against `BASE_URL`. Syne was loaded for years and used
+  by exactly nothing; it is gone.
 - **Plain CSS, one file.** `src/styles/global.css`, BEM-ish
   `block__element--modifier`. Not CSS Modules, not Tailwind. At ~1,100 lines for
   ~20 components this is fine; revisit if it doubles.
@@ -182,13 +190,12 @@ control; alt text unless decorative; external links verified.
 - The site still gives already-joined members limited reason to return.
 - Member quotes were planned and never built. Past events now carry some of
   that weight.
-- Google Fonts is still hotlinked. Self-hosting Inter and Syne would remove the
-  transfer to Google on every page view, along with two preconnects and the
-  `style-src` / `font-src` allowances.
+- The homepage teaser is one deploy behind `/activity` on newly announced
+  events. See the events tradeoff above.
 
 ## Design reference
 
-Dark fixed video background under a heavy dark overlay. Inter throughout, with
-Syne loaded for display use. Brand teal `#02E2B3` on near-black. Full-width dark
+Dark fixed video background under a heavy dark overlay. Inter throughout, self
+hosted, weights 100-700. Brand teal `#02E2B3` on near-black. Full-width dark
 bands, generous section rhythm, fade-up on scroll. Colour and shadow values live
 as CSS custom properties on `:root` — use them rather than new literals.
