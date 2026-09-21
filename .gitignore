@@ -42,6 +42,7 @@ Thumbs.db
 
 # Prerender SSR bundle (dist/ above does not match this)
 .prerender/
+
 # Vercel deploy config. Kept locally so a move back is one step, but not
 # tracked: GitHub Pages is the deploy target and a stale header config in the
 # repo would be misread as live. The CSP lives in index.html.

@@ -1,175 +1,157 @@
 # AGENTS.md
 
-## Project
+Working notes for anyone — human or agent — changing this codebase. `README.md`
+covers setup and day-to-day content edits. This file covers the decisions, the
+contracts you must not break, and the traps that have already cost time.
 
-This repository is for rebuilding https://www.med-dev.org/ as a React website.
-The first milestone is visual and content parity: the React implementation
-should look identical to the current public website unless a later, explicit
-design decision says otherwise. After parity is achieved, expand the site into a
-more useful hub for people who are already in the community as well as new
-visitors.
+## What this is
 
-## Product Direction
+The website for med-dev, a Munich health-tech community. It replaced a
+Carrd-style single-page site; the visual-parity milestone is done, and the site
+has since grown past the original into a multi-route hub.
 
-- Make the website worth revisiting for existing WhatsApp/community members.
-- Give upcoming events and calendar access first-class visibility through the
-  public Luma calendar embed.
-- Add a direct WhatsApp join button so new people can join without going through
-  Notion first.
-- Make the Inner Circle program clear, concrete, and prominent.
-- Make newsletters easy to discover instead of buried near the end.
-- Keep Substack/newsletter support from the original website.
-- Show social proof through member quotes, event highlights, and partner logos.
-- Keep joining the community simple, especially through a WhatsApp CTA.
-- Keep the organizer/team list current and easy to maintain.
+It is a static site. There is no backend, no database, no serverless function,
+and adding one is a significant decision (see Tradeoffs).
 
-## Implementation Principles
+## Stack, and why
 
-- Prefer content-driven components backed by typed data files.
-- Keep sections reusable, but avoid abstracting before there is real repetition.
-- Build accessible semantic HTML first; layer animation and polish after content
-  and responsive layout are correct.
-- Site assets live in `public/assets/{images,videos}` and are served from
-  `/assets/...`. Vite's content-hashed bundle output goes to `/build/...`;
-  only that is cached immutably. Avoid decorative placeholder-heavy pages.
-- Do not make clickable images navigate to the top of the page. If current image
-  styling needs to be preserved, implement it with non-link image wrappers unless
-  there is a real destination.
-- Treat external links, forms, calendar embeds, and newsletter links as tracked
-  integration points that need QA before launch.
-- Keep copy and factual claims easy to update without editing layout code.
+- **React 18 + TypeScript + Vite.** No SSR framework: the build prerenders every
+  route to static HTML with `react-dom/server` (`scripts/prerender.mjs`), which
+  gets the SEO and link-preview benefits without the framework.
+- **Plain CSS, one file.** `src/styles/global.css`, BEM-ish
+  `block__element--modifier`. Not CSS Modules, not Tailwind. At ~1,100 lines for
+  ~20 components this is fine; revisit if it doubles.
+- **`lucide-react`** for icons. Already a dependency, tree-shakes well.
+- **Content in typed data files** under `src/content/`, so copy changes never
+  require touching layout code.
+- **No data-fetching library.** The one async call uses `useState` +
+  `useEffect` with a `"loading" | "success" | "empty" | "error"` union. Match
+  that pattern rather than introducing a dependency.
 
-## Suggested Stack
+Avoid abstracting before there is real repetition.
 
-- React with TypeScript.
-- Vite. The build prerenders every route to static HTML with `react-dom/server`
-  (see `scripts/prerender.mjs`), so no server-rendering framework is needed.
-- CSS Modules, vanilla CSS, or Tailwind are all acceptable; pick one and use it
-  consistently. If brand guidelines arrive as tokens, translate them into CSS
-  custom properties.
-- Use `lucide-react` for common UI icons if icons are needed.
-- Use a structured content folder for events, team members, partners,
-  testimonials, newsletter issues, and program pages.
-
-## File Organization Target
+## Structure
 
 ```text
 src/
   app/
-    App.tsx           router shell, scroll handling
-    routes.tsx        the route table: path + element + metadata
-    main.tsx          client entry; hydrates prerendered HTML
-    useDocumentMeta.ts  keeps head tags right across client navigation
-  entry-server.tsx    prerender entry (imports App, never main.tsx)
+    App.tsx             router shell, scroll handling, error boundary
+    routes.tsx          the route table: path + element + metadata
+    main.tsx            client entry; hydrates prerendered HTML
+    useDocumentMeta.ts  keeps head tags correct across client navigation
+  entry-server.tsx      prerender entry (imports App, never main.tsx)
   components/
-    common/
-    layout/
-    sections/
+    common/             Section, ButtonLink, PageIntro, ErrorBoundary
+    layout/             Header, Footer, Background, CookieNotice
+    sections/           one file per page section
   content/
-    routeMeta.ts      titles, descriptions, robots per route
-    newsletterFeed.ts feed parsing helpers
-    partners.ts
-    siteLinks.ts      every external URL and address
-    team.ts
-  styles/
-    global.css
+    routeMeta.ts        titles, descriptions, robots, canonical helpers
+    assets.ts           asset() — every static URL goes through this
+    siteLinks.ts        every external URL and address
+    team.ts, partners.ts, newsletterFeed.ts
+  styles/global.css
   __tests__/
 scripts/
-  prerender.mjs       writes dist/<route>/index.html, 404, sitemap, robots
-  optimize-assets.sh  one-off image/video conversion
+  prerender.mjs         writes dist/<route>/index.html, 404, sitemap, robots
+  optimize-assets.sh    one-off image/video conversion, run by hand
 ```
 
-Keep public static files in `public/`. Human-facing setup notes go in
-`README.md`; this file holds the contracts and tradeoffs.
+## Contracts you must not break
 
-## Quality Bar
+**1. The route table is the single source of truth.**
+`src/app/routes.tsx` drives the router, the prerender list, the head tags and
+`sitemap.xml`. Adding a route without a `src/content/routeMeta.ts` entry is a
+type error, and `routes.test.ts` fails if the two drift.
 
-- The site must work well on mobile, tablet, and desktop.
-- Navigation must support anchor links without layout jumps.
-- All buttons and links must have clear accessible labels.
-- Images need alt text unless purely decorative.
-- Calendar, WhatsApp, newsletter, contact, and legal links must be verified.
-- Events come from an embedded public Luma calendar, not the Google Calendar
-  iCal feed the earlier drafts assumed.
-- Add tests for content helpers or filtering logic when those become non-trivial.
-- Run `npm run format`, `npm run lint`, `npm test`, and `npm run build` before
-  release. All four must pass.
+This is load-bearing because there is no SPA catch-all rewrite: the host serves
+one real file per route and returns a genuine 404 otherwise. A route in the
+router but missing from the table works in dev and 404s in production.
 
-## Routing And Metadata
+**2. Redirect-only paths stay out of the route table.**
+`<Navigate>` renders an *empty string* under `StaticRouter`, so prerendering one
+would ship a page that hydrates onto an empty root. `/events` and `/newsletter`
+get script-less meta-refresh stubs instead, emitted by the prerender script. The
+build fails if any real route renders empty — that guard is there because it has
+already caught this.
 
-`src/app/routes.tsx` is the single source of truth. One array drives the
-router, the prerender list, the per-page head tags, and `sitemap.xml`. Adding a
-route there without a matching `src/content/routeMeta.ts` entry is a type error,
-and `src/__tests__/routes.test.ts` fails if the two ever drift.
+**3. Never hardcode an absolute asset path.**
+Everything goes through `asset()` / `assetSrcSet()` in `src/content/assets.ts`,
+which prefixes `import.meta.env.BASE_URL`. A literal `/assets/...` works at a
+domain root and silently 404s on the subpath deploy.
 
-This matters because there is no SPA catch-all rewrite any more: the host serves
-one real file per route and returns a genuine 404 (`dist/404.html`) for anything
-else. A route in the router but missing from the route table would work in dev
-and 404 in production.
+**4. Nothing may differ between server and client render.**
+The prerendered HTML is hydrated, so reading `localStorage`, `matchMedia`, dates
+or randomness *during render* is a hydration mismatch. Read them in an effect
+and start from the value the server produced. `CookieNotice` starts hidden and
+`Background` starts on the poster for exactly this reason — both were bugs first.
 
-Redirect-only paths (`/events`, `/newsletter`) must stay out of the route table.
-`<Navigate>` renders an empty string under `StaticRouter`, so prerendering one
-would ship a page that hydrates onto an empty root. They get 308s in
-`vercel.json` plus script-less meta-refresh stubs for hosts without redirects.
+## Traps already paid for
 
-## Assets
+- **`width`/`height` on `<img>` are presentational hints for *both* dimensions.**
+  CSS that sets only the width leaves the height pinned to the attribute and the
+  image stretches. The global `img { height: auto }` fixes it; do not remove it.
+- **`document.querySelector(hash)` throws** on a hash that is not a valid
+  selector, e.g. `/#2024`. Use `getElementById`.
+- **`localStorage` throws rather than returning null** when site data is
+  blocked. Every access is wrapped.
+- **Asset conversions must be idempotent.** `optimize-assets.sh` is keyed off
+  `*-source` files; an earlier version re-encoded its own output on every run and
+  lost a quality generation each time.
+- **`fetchPriority` is React 19.** It is silently dropped with a warning on 18.
 
-Images are WebP at roughly 2x their CSS display size; the background video is
-re-encoded H.264. `scripts/optimize-assets.sh` documents the exact commands.
-It is **not** part of the build: run it by hand after adding or replacing an
-asset, commit the output, and delete the original. Every `<img>` needs explicit
-`width` and `height` so layout does not shift.
+## Quality bar
 
-`card.jpg` stays JPEG because some link unfurlers handle WebP Open Graph images
-poorly.
+`npm run format`, `npm run lint`, `npm test` and `npm run build` must all pass
+before anything ships. The workflow enforces this on every push.
 
-## Known Tradeoffs
+Verification means checking the thing the change claims to do, not that the page
+loads. Rendered aspect ratio vs natural aspect ratio, not "the image appeared".
+Console clean on a *fresh* tab, since the buffer is cumulative. Both the
+root-domain and `VITE_BASE` builds, since only one of them is exercised locally.
 
-- **rss2json**: newsletter posts come through the unauthenticated
-  `api.rss2json.com`, matching the current live site. It is rate limited per IP,
-  it is a single point of failure for that section, and visitor IPs reach a
-  third party. Replacing it would need a serverless function, which would end
-  GitHub Pages portability.
+Beyond that: works on mobile, tablet and desktop; accessible labels on every
+control; alt text unless decorative; external links verified.
+
+## Tradeoffs and constraints
+
+- **rss2json.** Newsletter posts come through the unauthenticated
+  `api.rss2json.com`, matching what the previous site did. It is rate limited per
+  IP, it is a single point of failure for that section, and visitor IPs reach a
+  third party. It has been observed returning 500s. Replacing it needs a
+  serverless function, which would end static-host portability.
 - **GitHub Pages is the deploy target** (`.github/workflows/deploy.yml`),
-  currently as a project page at a repo subpath. The build is base-aware:
-  `VITE_BASE`, `VITE_SITE_ORIGIN` and `VITE_NOINDEX` drive it, every asset URL
-  goes through `asset()` in `src/content/assets.ts`, and both routers take a
-  basename. Never hardcode an absolute `/assets/...` path again — it will break
-  the subpath build silently. README.md has the steps to move to the custom
-  domain.
-- **Pages cannot set response headers.** That is why the CSP and referrer policy
-  live as `<meta>` tags in `index.html` — that is the only place policy belongs.
-  Two things are unavoidably lost:
-  `X-Frame-Options`/`frame-ancestors` and `X-Content-Type-Options`, both
-  header-only. Caching is fixed at `max-age=600` for everything, including the
-  content-hashed `/build` output.
+  currently a project page at a repo subpath. `VITE_BASE`, `VITE_SITE_ORIGIN`
+  and `VITE_NOINDEX` drive it; README has the steps to move to a custom domain.
+- **Pages cannot set response headers.** The CSP and referrer policy are
+  `<meta>` tags in `index.html` — that is the only place policy belongs.
+  Unavoidably lost: `X-Frame-Options`/`frame-ancestors` and
+  `X-Content-Type-Options`, both header-only. Caching is fixed at `max-age=600`
+  for everything, including content-hashed output.
+- **The CSP is enforcing, not report-only** — a meta tag cannot be report-only.
+  `img-src` is deliberately loose (`https:`) so a Substack CDN change cannot
+  silently break newsletter thumbnails; `script-src 'self'` is the directive
+  that matters and stays tight.
 - **`vercel.json` is gitignored, not deleted.** It stays on maintainers'
-  machines so a move back to Vercel is one step, but it is untracked: a header
-  config in the repo would be misread as live when Pages cannot serve headers.
+  machines so a move back to Vercel is one step, but a header config in the repo
+  would be misread as live.
 - **Canonicals use the trailing-slash form** (`/team/`), because Pages 301s
-  `/team` to `/team/`. `canonicalPath()` in `routeMeta.ts` is the one place that
-  decides this, and `routes.test.ts` covers it. If the host ever changes to one
-  that serves extensionless paths directly, change it there.
-- **Scroll-driven reveal**: `.reveal` uses `animation-timeline: view()`, which
-  Firefox still keeps behind a flag. There it degrades to one fade-up on load.
+  `/team` to `/team/`. `canonicalPath()` in `routeMeta.ts` is the only place
+  that decides this.
+- **Scroll-driven reveal.** `.reveal` uses `animation-timeline: view()`, which
+  Firefox keeps behind a flag; there it degrades to one fade-up on load.
   Deliberate, not a bug.
-- **`/community`** is reachable only from body CTAs, not the nav, and overlaps
-  the homepage. It is prerendered and indexable; either link it from the nav or
-  point its canonical at `/`.
 
-## Current Known Issues To Fix
+## Open product questions
 
-- Newsletter content is too buried.
-- Inner Circle explanation is not clear/prominent enough.
-- Past partners/collaborations are not visible enough.
-- The site has limited reasons for already-joined members to return.
+- `/community` is reachable only from body CTAs, not the nav, and overlaps the
+  homepage. Either link it from the nav or point its canonical at `/`.
+- Past partners and collaborations could be more prominent.
+- The site still gives already-joined members limited reason to return.
+- Social proof (member quotes, event highlights) was planned and never built.
 
-## Parity Notes
+## Design reference
 
-- Current design uses a dark fixed video background with a heavy dark overlay.
-- Typography is primarily Inter, with Syne loaded for possible brand/display use.
-- The dominant brand color is bright teal (`#02E2B3`) on a near-black/dark gray
-  background.
-- Preserve the current section rhythm, full-width dark bands, fade-in/fade-up
-  animation feel, logo placement, and large health-tech hero imagery for the
-  parity milestone.
+Dark fixed video background under a heavy dark overlay. Inter throughout, with
+Syne loaded for display use. Brand teal `#02E2B3` on near-black. Full-width dark
+bands, generous section rhythm, fade-up on scroll. Colour and shadow values live
+as CSS custom properties on `:root` — use them rather than new literals.

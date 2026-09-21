@@ -31,6 +31,56 @@ Then open http://localhost:5173.
 `scripts/prerender.mjs`, which writes one HTML file per route plus `404.html`,
 `sitemap.xml` and `robots.txt`.
 
+## How it works
+
+A normal React single-page app, with one addition: **every route is prerendered
+to static HTML at build time.**
+
+```
+npm run build
+  │
+  ├─ tsc -b                      typecheck
+  ├─ vite build                  client bundle  → dist/build/
+  ├─ vite build --ssr            server bundle  → .prerender/
+  └─ node scripts/prerender.mjs  render each route → dist/<route>/index.html
+                                 plus 404.html, sitemap.xml, robots.txt
+```
+
+So `dist/team/index.html` is a real file containing the fully rendered team
+page. That means:
+
+- Search engines and link previews (WhatsApp, LinkedIn, Slack) see real content
+  and correct per-page titles without running JavaScript.
+- Deep links work on any static host, with no SPA redirect hack.
+- Unknown URLs get a genuine HTTP 404 rather than a silent redirect home.
+
+On load, React **hydrates** that HTML rather than re-rendering it. The practical
+consequence is that the first render must produce exactly what the server
+produced — so anything browser-specific (`localStorage`, `matchMedia`) has to be
+read in an effect, not during render.
+
+### The route table
+
+`src/app/routes.tsx` is the single source of truth. One array drives the router,
+the list of pages to prerender, the per-page `<title>`/description/social tags,
+and `sitemap.xml`. Adding a route there without a matching entry in
+`src/content/routeMeta.ts` is a type error, and a test fails if the two drift.
+
+### Layout of the code
+
+```text
+src/
+  app/          router shell, route table, client + meta wiring
+  components/
+    common/     Section, ButtonLink, PageIntro, ErrorBoundary
+    layout/     Header, Footer, Background, CookieNotice
+    sections/   one file per page section
+  content/      typed data: copy, links, team, partners, route metadata
+  styles/       global.css — one plain CSS file, BEM-ish naming
+  __tests__/
+scripts/        prerender + asset optimisation
+```
+
 ## Changing the content
 
 Most copy lives in typed data files, so you do not need to touch layout code.
@@ -74,12 +124,16 @@ To move it to the custom domain:
 Nothing else in the codebase changes. `VITE_NOINDEX` is what keeps the preview
 out of search results, so removing it is what makes the site indexable.
 
-## Notes for maintainers
+## Before you change anything
 
-`AGENTS.md` has the detail: the routing and metadata contract, why the CSP is a
-meta tag rather than a header, and the known tradeoffs (the third-party
-newsletter feed, what GitHub Pages cannot do, browser support for the scroll
-animation).
+Read `AGENTS.md`. It records the decisions behind the stack, the four contracts
+that will break the build or the live site if ignored, and the bugs already paid
+for once (stretched images, hydration mismatches, a non-idempotent asset script).
+It is written for both human contributors and AI coding assistants, and is worth
+keeping current as the code changes.
+
+Run `npm run format && npm run lint && npm test && npm run build` before
+pushing. The deploy workflow runs the same checks and blocks on failure.
 
 ## Licence
 
