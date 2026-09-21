@@ -51,7 +51,11 @@ jobs:
           VITE_SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
           VITE_NOINDEX: "true"
 
+      # enablement turns Pages on via the API if it is not configured yet, so
+      # a fresh clone or a transferred repo deploys without a manual setting.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v4
         with:
