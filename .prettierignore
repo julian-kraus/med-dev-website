@@ -5,3 +5,6 @@ package-lock.json
 public
 docs
 *.md
+
+# Generated from the Luma calendar; the script writes it, not Prettier.
+src/content/events.generated.ts

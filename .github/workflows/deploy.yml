@@ -37,6 +37,12 @@ jobs:
       - run: npm run lint
       - run: npm test
 
+      # Bakes the Luma calendar into the bundle: api.lu.ma sends no CORS
+      # headers, so this cannot happen in the browser. On a Luma outage the
+      # build falls back to the committed src/content/events.generated.ts.
+      - run: npm run fetch:events
+        continue-on-error: true
+
       # This deploys to a GitHub Pages *project* page, so the site lives at
       # /<repo>/ rather than a domain root, and every URL is built against
       # BASE_URL. NOINDEX keeps this preview out of search results so it never

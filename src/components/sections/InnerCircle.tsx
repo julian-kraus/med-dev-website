@@ -101,14 +101,11 @@ export function InnerCirclePreview() {
         heading="A closer circle inside the community"
         aside={
           <>
-            <ButtonLink href="/inner-circle">Learn about Inner Circle</ButtonLink>
-            <ButtonLink
-              href={siteLinks.whatsappInvite}
-              target="_blank"
-              rel="noreferrer"
-              variant="secondary"
-            >
+            <ButtonLink href={siteLinks.whatsappInvite} target="_blank" rel="noreferrer">
               Join WhatsApp
+            </ButtonLink>
+            <ButtonLink href="/inner-circle" variant="secondary">
+              Learn about Inner Circle
             </ButtonLink>
           </>
         }

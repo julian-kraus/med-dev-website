@@ -48,11 +48,14 @@ src/
     routeMeta.ts        titles, descriptions, robots, canonical helpers
     assets.ts           asset() — every static URL goes through this
     siteLinks.ts        every external URL and address
+    events.ts           hand-written type + accessors for the Luma events
+    events.generated.ts written by scripts/fetch-events.mjs; do not edit
     team.ts, partners.ts, newsletterFeed.ts
   styles/global.css
   __tests__/
 scripts/
   prerender.mjs         writes dist/<route>/index.html, 404, sitemap, robots
+  fetch-events.mjs      pulls the Luma calendar into src/content/
   optimize-assets.sh    one-off image/video conversion, run by hand
 ```
 
@@ -114,6 +117,35 @@ control; alt text unless decorative; external links verified.
 
 ## Tradeoffs and constraints
 
+- **Events are split: upcoming is live, past is baked in.** Luma's embed only
+  ever renders *upcoming* events, so it cannot carry the archive; but it is also
+  the only thing on the site that updates without a deploy, which is exactly
+  what a newly announced event needs. So `/activity` keeps the iframe for
+  upcoming, and `scripts/fetch-events.mjs` writes past events into
+  `src/content/events.generated.ts` for everything else. Past events going
+  stale between deploys does not matter.
+
+  The fetch cannot happen in the browser: `api.lu.ma/calendar/get-items`
+  answers unauthenticated but sends no `Access-Control-Allow-Origin`. The
+  deploy workflow runs it on every push with `continue-on-error: true`, and the
+  generated file is committed, so a Luma outage or an offline build falls back
+  to the last good data rather than failing. `workflow_dispatch` is the manual
+  refresh.
+
+  The homepage teaser is the one place this splits awkwardly: it renders
+  build-time events, not the iframe, so an event announced since the last
+  deploy shows on `/activity` but not on `/`. It stays honest rather than
+  wrong — with no build-time upcoming events it labels the cards "Recent
+  events" and shows past ones — but it can be a deploy behind.
+
+  The script also fetches *upcoming* events, but only to size the frame:
+  `.luma-embed--short` keeps an empty calendar from rendering as a 42rem box
+  reading "No Upcoming Events". An event added since the last deploy still
+  shows in the iframe, just in less room.
+
+  Dates are formatted *in the script*, not the component: `toLocaleDateString`
+  reads the host timezone, so formatting a prerendered date during render would
+  be a hydration mismatch for any event near midnight UTC.
 - **rss2json.** Newsletter posts come through the unauthenticated
   `api.rss2json.com`, matching what the previous site did. It is rate limited per
   IP, it is a single point of failure for that section, and visitor IPs reach a
@@ -143,11 +175,16 @@ control; alt text unless decorative; external links verified.
 
 ## Open product questions
 
-- `/community` is reachable only from body CTAs, not the nav, and overlaps the
-  homepage. Either link it from the nav or point its canonical at `/`.
-- Past partners and collaborations could be more prominent.
+- The partner list is presented as partners, but the intro says med-dev "grew
+  through company visits". A lab tour is not a partnership, the names are
+  unlinked plain text, and `.logo-wall` holds no logos. "Stanford Prezi" also
+  looks like a mangled name.
 - The site still gives already-joined members limited reason to return.
-- Social proof (member quotes, event highlights) was planned and never built.
+- Member quotes were planned and never built. Past events now carry some of
+  that weight.
+- Google Fonts is still hotlinked. Self-hosting Inter and Syne would remove the
+  transfer to Google on every page view, along with two preconnects and the
+  `style-src` / `font-src` allowances.
 
 ## Design reference
 

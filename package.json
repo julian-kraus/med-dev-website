@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "fetch:events": "node scripts/fetch-events.mjs",
     "build": "npm run typecheck && npm run build:client && npm run build:ssr && npm run prerender",
     "build:client": "vite build",
     "build:ssr": "vite build --ssr src/entry-server.tsx --outDir .prerender",

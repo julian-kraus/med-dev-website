@@ -10,7 +10,7 @@ export function Team() {
           <article className="team-member" key={member.id}>
             <img
               src={member.image}
-              alt={member.name}
+              alt=""
               width={768}
               height={768}
               loading="lazy"
@@ -47,7 +47,7 @@ export function TeamPreview() {
           <article className="team-member" key={member.id}>
             <img
               src={member.image}
-              alt={member.name}
+              alt=""
               width={768}
               height={768}
               loading="lazy"

@@ -1,13 +1,12 @@
 import type { ReactNode } from "react";
 import { ActivityPillars } from "../components/sections/ActivityPillars";
 import { ActivityFeed } from "../components/sections/ActivityFeed";
-import { CommunityValue } from "../components/sections/CommunityValue";
 import { Contact } from "../components/sections/Contact";
 import { CurrentStory } from "../components/sections/CurrentStory";
 import { Hero } from "../components/sections/Hero";
 import { InnerCircle, InnerCirclePreview } from "../components/sections/InnerCircle";
 import { Imprint, Privacy } from "../components/sections/Legal";
-import { LumaCalendarEmbed } from "../components/sections/LumaCalendarEmbed";
+import { PastEvents, UpcomingEvents } from "../components/sections/Events";
 import { MemberPartnerCtas } from "../components/sections/MemberPartnerCtas";
 import { NewsletterFeature } from "../components/sections/NewsletterFeature";
 import { NotFound } from "../components/sections/NotFound";
@@ -35,10 +34,10 @@ export const appRoutes: AppRoute[] = [
         <Hero />
         <CurrentStory variant="preview" />
         <ActivityFeed />
+        <TeamPreview />
         <InnerCirclePreview />
         <PartnersPreview />
-        <TeamPreview />
-        <Contact variant="cta" />
+        <Contact />
       </>
     ),
   },
@@ -54,7 +53,6 @@ export const appRoutes: AppRoute[] = [
         />
         <CurrentStory />
         <ActivityPillars />
-        <CommunityValue />
         <MemberPartnerCtas />
       </>
     ),
@@ -67,9 +65,10 @@ export const appRoutes: AppRoute[] = [
         <PageIntro
           eyebrow="Activity"
           title="What's happening at med-dev"
-          intro="See upcoming community events, read recent recaps, and follow what members are learning, building, and organizing."
+          intro="Upcoming med-dev events, the events we have already hosted, and recent community stories."
         />
-        <LumaCalendarEmbed />
+        <UpcomingEvents />
+        <PastEvents />
         <NewsletterFeature />
       </>
     ),
@@ -95,8 +94,8 @@ export const appRoutes: AppRoute[] = [
       <>
         <PageIntro
           eyebrow="Partners"
-          title="Collaborators and community partners"
-          intro="A view of organizations, companies, and communities connected to med-dev events, learning formats, and ecosystem work."
+          title="Organizations and communities we work with"
+          intro="Companies, clinics, research groups, and communities connected to med-dev events, lab tours, and ecosystem work."
         />
         <Partners />
         <MemberPartnerCtas />

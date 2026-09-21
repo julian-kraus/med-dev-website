@@ -2,6 +2,14 @@ import { Link } from "react-router-dom";
 import { siteLinks } from "../../content/siteLinks";
 import { asset } from "../../content/assets";
 
+const pageLinks = [
+  { to: "/community", label: "Community" },
+  { to: "/activity", label: "Activity" },
+  { to: "/inner-circle", label: "Inner Circle" },
+  { to: "/partners", label: "Partners" },
+  { to: "/team", label: "Team" },
+];
+
 export function Footer() {
   return (
     <footer className="footer">
@@ -16,6 +24,15 @@ export function Footer() {
         />
         <p>Healthcare. Technology. Innovation.</p>
       </div>
+      {/* The nav used to be header-only, which left every page one mis-scroll
+          away from being a dead end. */}
+      <nav className="footer__links" aria-label="Site pages">
+        {pageLinks.map((link) => (
+          <Link key={link.to} to={link.to}>
+            {link.label}
+          </Link>
+        ))}
+      </nav>
       <div className="footer__links">
         <a href={`mailto:${siteLinks.contactEmail}`}>Mail</a>
         <a href={siteLinks.linkedIn} target="_blank" rel="noreferrer">

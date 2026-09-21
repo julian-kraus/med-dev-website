@@ -24,3 +24,6 @@ export const partnerGroups: PartnerGroup[] = [
     names: ["TUM.ai", "Women in Robotics & AI", "GDG on campus"],
   },
 ];
+
+/** A short, representative slice for the homepage preview. */
+export const featuredPartners = partnerGroups.flatMap((group) => group.names).slice(0, 8);

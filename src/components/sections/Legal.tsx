@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
+import { PageIntro } from "../common/PageIntro";
 import { Section } from "../common/Section";
 import { siteLinks } from "../../content/siteLinks";
 
 function ImprintContent() {
   return (
     <article className="legal-card" id="imprint">
-      <h3>Imprint / Impressum</h3>
       <dl>
         <div>
           <dt>Information according to Section 5 TMG</dt>
@@ -47,7 +47,6 @@ function ImprintContent() {
 function PrivacyContent() {
   return (
     <article className="legal-card" id="privacy">
-      <h3>Data privacy</h3>
       <p>
         Controller for this website is Leonard Rinser, Keltenstr. 8, 86934 Reichling, Germany,
         reachable at <a href={`mailto:${siteLinks.contactEmail}`}>{siteLinks.contactEmail}</a>.
@@ -59,17 +58,28 @@ function PrivacyContent() {
       </p>
       <p>We do not use Google Analytics, Google AdSense, or Vercel Web Analytics.</p>
       <p>
-        Upcoming events are embedded from the public med-dev Luma calendar. Event details,
-        registration, and attendance flows are handled by Luma.
+        Fonts are loaded from Google Fonts (fonts.googleapis.com and fonts.gstatic.com) on every
+        page view. Your IP address and browser information are transmitted to Google in the process.
       </p>
       <p>
-        Newsletter entries are loaded from the public med-dev Substack RSS feed through RSS2JSON,
-        similar to the current med-dev website. Clicking Substack, WhatsApp, LinkedIn, or Luma links
-        opens third-party services whose own privacy policies apply.
+        Upcoming events are embedded from the public med-dev Luma calendar, so your browser loads
+        content directly from Luma when you open that page. Past events are fetched from the same
+        calendar when this site is built; their cover images are served from Luma's image CDN. Event
+        details, registration, and attendance are handled by Luma.
       </p>
       <p>
-        Contact currently happens through email or linked services such as WhatsApp, LinkedIn, Luma,
-        and Substack. A dedicated website contact form is not configured yet.
+        Newsletter entries are loaded in your browser from the public med-dev Substack RSS feed
+        through RSS2JSON, similar to the previous med-dev website. Your IP address reaches RSS2JSON
+        as part of that request.
+      </p>
+      <p>
+        The contact form is a Google Form hosted by Google. Anything you enter there, including your
+        name and email address, is submitted to and processed by Google, not by this website.
+        Contact by email, WhatsApp, LinkedIn, or Substack is also possible.
+      </p>
+      <p>
+        Clicking Substack, WhatsApp, LinkedIn, Google, or Luma links opens third-party services
+        whose own privacy policies apply.
       </p>
     </article>
   );
@@ -77,40 +87,44 @@ function PrivacyContent() {
 
 export function Imprint() {
   return (
-    <Section
-      id="imprint"
-      eyebrow="Legal"
-      title="Imprint / Impressum"
-      intro="Responsible person and contact details for the med-dev website."
-    >
-      <div className="legal-grid legal-grid--single reveal">
-        <ImprintContent />
-        <div className="section-actions">
-          <Link className="button-link button-link--secondary" to="/legal/privacy">
-            Read data privacy
-          </Link>
+    <>
+      <PageIntro
+        eyebrow="Legal"
+        title="Imprint / Impressum"
+        intro="Responsible person and contact details for the med-dev website."
+      />
+      <Section id="imprint-details" className="section--content-only">
+        <div className="legal-grid legal-grid--single reveal">
+          <ImprintContent />
+          <div className="section-actions">
+            <Link className="button-link button-link--secondary" to="/legal/privacy">
+              Read data privacy
+            </Link>
+          </div>
         </div>
-      </div>
-    </Section>
+      </Section>
+    </>
   );
 }
 
 export function Privacy() {
   return (
-    <Section
-      id="privacy"
-      eyebrow="Legal"
-      title="Data privacy"
-      intro="How this website handles hosting, analytics, public calendar data, newsletter data, and external links."
-    >
-      <div className="legal-grid legal-grid--single reveal">
-        <PrivacyContent />
-        <div className="section-actions">
-          <Link className="button-link button-link--secondary" to="/legal/imprint">
-            Read imprint
-          </Link>
+    <>
+      <PageIntro
+        eyebrow="Legal"
+        title="Data privacy"
+        intro="How this website handles hosting, fonts, public calendar data, newsletter data, the contact form, and external links."
+      />
+      <Section id="privacy-details" className="section--content-only">
+        <div className="legal-grid legal-grid--single reveal">
+          <PrivacyContent />
+          <div className="section-actions">
+            <Link className="button-link button-link--secondary" to="/legal/imprint">
+              Read imprint
+            </Link>
+          </div>
         </div>
-      </div>
-    </Section>
+      </Section>
+    </>
   );
 }

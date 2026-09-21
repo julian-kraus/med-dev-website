@@ -59,7 +59,7 @@ export function ActivityPillars() {
         </div>
       </div>
       <div className="section-actions">
-        <ButtonLink href="/activity" variant="secondary">
+        <ButtonLink href="/activity#events" variant="secondary">
           See upcoming events
         </ButtonLink>
       </div>

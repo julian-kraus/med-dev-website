@@ -3,21 +3,14 @@ import { ButtonLink } from "../common/ButtonLink";
 import { Section } from "../common/Section";
 import { siteLinks } from "../../content/siteLinks";
 
-const copy = {
-  cta: {
-    title: "Want to collaborate with med-dev?",
-    intro:
-      "Reach out for partnerships, talks, event ideas, community questions, and collaborations.",
-  },
-  full: {
-    title: "Innovate with us",
-    intro: "Let's build a new era in health innovation through boundless collaboration.",
-  },
-} as const;
-
-export function Contact({ variant = "full" }: { variant?: keyof typeof copy }) {
+export function Contact() {
   return (
-    <Section id="contact" eyebrow="Contact" {...copy[variant]}>
+    <Section
+      id="contact"
+      eyebrow="Contact"
+      title="Want to collaborate with med-dev?"
+      intro="Reach out for partnerships, talks, event ideas, and community questions."
+    >
       <div className="contact-actions contact-actions--wide reveal">
         <ButtonLink href={siteLinks.contactForm} target="_blank" rel="noreferrer">
           <NotebookPen size={18} aria-hidden="true" />

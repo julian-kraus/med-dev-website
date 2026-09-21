@@ -361,51 +361,21 @@ h3 {
   font-size: 1.08rem;
 }
 
-.activity-teaser {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.activity-teaser__item {
-  display: grid;
-  align-items: start;
-  gap: 0.6rem;
-  padding: 1.2rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
-}
-
-.activity-teaser__item svg {
-  color: var(--color-brand);
-}
-
-.activity-teaser__item p {
-  color: var(--color-soft);
-}
-
-.activity-teaser__item .button-link {
-  justify-self: start;
-  margin-top: 0.4rem;
-}
-
-.value-grid,
 .team-grid,
 .pillar-grid,
 .newsletter-grid,
+.event-grid,
 .legal-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
-.value-item,
 .pillar-item,
 .team-member,
 .newsletter-band,
 .newsletter-card,
+.event-card,
 .luma-embed,
 .split-panel,
 .logo-wall,
@@ -418,9 +388,9 @@ h3 {
   box-shadow: var(--shadow-soft);
 }
 
-.value-item,
 .pillar-item,
 .newsletter-card,
+.event-card,
 .legal-card {
   display: grid;
   gap: 0.8rem;
@@ -428,31 +398,13 @@ h3 {
   padding: 1.2rem;
 }
 
-.value-item p,
 .pillar-item p,
 .split-panel p,
 .newsletter-band p,
 .newsletter-card p,
+.event-card p,
 .team-member p {
   color: var(--color-soft);
-}
-
-.luma-embed {
-  overflow: hidden;
-  min-height: 42rem;
-}
-
-.luma-embed iframe {
-  width: 100%;
-  min-height: 42rem;
-  border: 0;
-  background: #ffffff;
-}
-
-.preview-actions {
-  margin-top: -1px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.28);
 }
 
 .preview-actions__inner {
@@ -465,7 +417,6 @@ h3 {
   margin-top: 1.25rem;
 }
 
-.value-item svg,
 .pillar-item svg,
 .split-panel svg,
 .newsletter-band svg,
@@ -661,7 +612,11 @@ h3 {
 
 .photo-band img {
   width: 100%;
+  /* The width/height attributes pin both dimensions, so a max-height without
+     object-fit would squash the photo rather than crop it. */
   height: auto;
+  max-height: clamp(18rem, 45vh, 26rem);
+  object-fit: cover;
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   box-shadow: var(--shadow-soft);
@@ -754,6 +709,101 @@ h3 {
   display: grid;
   gap: 0.8rem;
   padding: 1.2rem;
+}
+
+.event-grid--preview,
+.newsletter-grid--preview {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Two-up cards are twice as wide as on /activity, so the same 16/9 crop would
+   make the homepage teaser taller than the section it teases. */
+.event-grid--preview img,
+.newsletter-grid--preview img {
+  aspect-ratio: 2.6 / 1;
+}
+
+.newsletter-grid--preview .newsletter-card p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.event-card {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.event-card:hover {
+  border-color: rgba(2, 226, 179, 0.52);
+  transform: translateY(-2px);
+}
+
+.event-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.event-card__body {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.1rem;
+}
+
+.event-card__body span {
+  color: var(--color-brand);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.event-card__location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+/* Sized off the build-time event count. A calendar that was empty at build
+   time gets a short frame rather than a 42rem "No Upcoming Events" box; an
+   event added since the last deploy still shows, just in less room. */
+.luma-embed {
+  overflow: hidden;
+  min-height: 34rem;
+}
+
+.luma-embed iframe {
+  width: 100%;
+  min-height: 34rem;
+  border: 0;
+  /* The embed renders dark; a white fallback flashed on every load. */
+  background: var(--color-bg);
+}
+
+/* Enough for Luma's own empty state without clipping it or leaving a gap. */
+.luma-embed--short,
+.luma-embed--short iframe {
+  min-height: 25rem;
+}
+
+.subhead {
+  margin: 1.75rem 0 0.9rem;
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section__header + .subhead {
+  margin-top: 0;
 }
 
 .newsletter-state {
@@ -1035,7 +1085,6 @@ h3 {
   }
 
   .hero__media {
-    order: -1;
     min-height: auto;
   }
 
@@ -1062,12 +1111,11 @@ h3 {
     order: 5;
   }
 
-  .value-grid,
   .team-grid,
   .pillar-grid,
   .newsletter-grid,
+  .event-grid,
   .legal-grid,
-  .activity-teaser,
   .split-panel,
   .newsletter-band,
   .story-band__inner,
@@ -1090,7 +1138,12 @@ h3 {
 
   .luma-embed,
   .luma-embed iframe {
-    min-height: 38rem;
+    min-height: 30rem;
+  }
+
+  .luma-embed--short,
+  .luma-embed--short iframe {
+    min-height: 25rem;
   }
 
   .story-band__inner.is-reversed .story-band__copy,

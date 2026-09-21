@@ -7,7 +7,6 @@ export type TeamMember = {
   bio: string;
   image: string;
   linkedin: string;
-  active: boolean;
 };
 
 export const teamMembers: TeamMember[] = [
@@ -18,7 +17,6 @@ export const teamMembers: TeamMember[] = [
     bio: "Viviana is a Software Engineer at Google, medical student at LMU, founder of DSC Munich and a community enthusiast with a passion to connect the two fields.",
     image: asset("/assets/images/image01.webp"),
     linkedin: "https://www.linkedin.com/in/viviana-sutedjo/",
-    active: true,
   },
   {
     id: "anja-oberender",
@@ -27,7 +25,6 @@ export const teamMembers: TeamMember[] = [
     bio: "Anja is a medical journalist at Springer Nature, studied Molecular Biology at LMU, is enthusiastic for science communication and med tech and aims to bring people from both areas together.",
     image: asset("/assets/images/image06.webp"),
     linkedin: "https://www.linkedin.com/in/anja-oberender-4b0356218/",
-    active: true,
   },
   {
     id: "leonard-rinser",
@@ -36,7 +33,6 @@ export const teamMembers: TeamMember[] = [
     bio: "Leonard is a healthcare entrepreneur himself for some years, has built the Fraunhofer deep tech accelerator AHEAD, co-founded GLAICE health and is the global healthcare executive at Sigma Squared Society.",
     image: asset("/assets/images/image08.webp"),
     linkedin: "https://www.linkedin.com/in/leonardrinser/",
-    active: true,
   },
   {
     id: "marlene-heckl",
@@ -45,7 +41,6 @@ export const teamMembers: TeamMember[] = [
     bio: "Marlene is a medical doctor (psychiatry/neurology) and freelance science journalist, she loves to bring medical professionals and techies together to create the healthcare solutions of tomorrow.",
     image: asset("/assets/images/image03.webp"),
     linkedin: "https://www.linkedin.com/in/marlene-heckl/",
-    active: true,
   },
   {
     id: "richard-gaus",
@@ -54,7 +49,6 @@ export const teamMembers: TeamMember[] = [
     bio: "Richard is a medical resident at LMU Klinikum, a master's student in Robotics & AI at TUM, and a visionary professional committed to realizing technology's potential to make healthcare more effective, user-friendly, and humane for everyone.",
     image: asset("/assets/images/image10.webp"),
     linkedin: "https://www.linkedin.com/in/richardgaus/",
-    active: true,
   },
   {
     id: "philipp-zagar",
@@ -63,6 +57,5 @@ export const teamMembers: TeamMember[] = [
     bio: "Philipp is a Software Engineer at Apple and a Research Fellow at Stanford Biodesign, focused on digital health software that integrates connected devices and interoperability standards.",
     image: asset("/assets/images/image09.webp"),
     linkedin: "https://www.linkedin.com/in/pzagar/",
-    active: true,
   },
 ];

@@ -1,4 +1,4 @@
-import { CalendarDays, Menu, X } from "lucide-react";
+import { MessageCircle, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ButtonLink } from "../common/ButtonLink";
@@ -6,7 +6,7 @@ import { siteLinks } from "../../content/siteLinks";
 import { asset } from "../../content/assets";
 
 const navItems = [
-  { href: "/", label: "Community", end: true },
+  { href: "/community", label: "Community" },
   { href: "/activity", label: "Activity" },
   { href: "/inner-circle", label: "Inner Circle" },
   { href: "/partners", label: "Partners" },
@@ -77,7 +77,6 @@ export function Header() {
           <NavLink
             key={item.href}
             to={item.href}
-            end={item.end}
             className={({ isActive }) => (isActive ? "is-active" : undefined)}
           >
             {item.label}
@@ -90,7 +89,7 @@ export function Header() {
         rel="noreferrer"
         className="header__cta"
       >
-        <CalendarDays size={18} aria-hidden="true" />
+        <MessageCircle size={18} aria-hidden="true" />
         Join WhatsApp
       </ButtonLink>
       <button
@@ -110,7 +109,6 @@ export function Header() {
             <NavLink
               key={item.href}
               to={item.href}
-              end={item.end}
               className={({ isActive }) => (isActive ? "is-active" : undefined)}
               onClick={() => setIsMenuOpen(false)}
             >

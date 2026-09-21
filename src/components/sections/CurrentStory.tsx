@@ -30,12 +30,9 @@ const storyBlocks = [
 export function CurrentStory({ variant = "full" }: { variant?: "preview" | "full" }) {
   return (
     <>
-      <Section
-        id="approach"
-        eyebrow="Approach"
-        title="We are a community for the next generation of truly interdisciplinary health tech experts."
-        intro="We bring medical and technical people together to share knowledge, build ideas, and improve healthcare through collaboration."
-      >
+      {/* No section intro on purpose: the panel below says the same thing,
+          at display size, and the two used to sit one under the other. */}
+      <Section id="approach" eyebrow="Approach" title="Where medicine and technology actually meet">
         <div className="statement-panel reveal">
           <p>
             med-dev connects medical and tech enthusiasts and gives them the resources to improve

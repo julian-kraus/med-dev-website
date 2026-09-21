@@ -76,9 +76,9 @@ export const routeMeta = {
     ogImage: "/assets/images/inner-circle-og.jpg",
   },
   "/partners": {
-    title: "Partners and collaborators | med-dev",
+    title: "Partners | med-dev",
     description:
-      "Organizations, companies, and communities connected to med-dev events, learning formats, and health-tech ecosystem work in Munich.",
+      "Companies, clinics, research groups, and communities connected to med-dev events, lab tours, and health-tech ecosystem work in Munich.",
   },
   "/team": {
     title: "Team | med-dev",
@@ -93,7 +93,7 @@ export const routeMeta = {
   "/legal/privacy": {
     title: "Data privacy | med-dev",
     description:
-      "How the med-dev website handles hosting, analytics, public calendar data, newsletter data, and external links.",
+      "How the med-dev website handles hosting, fonts, public calendar data, newsletter data, the contact form, and external links.",
     noindex: true,
   },
   "/404": {

@@ -23,6 +23,7 @@ Then open http://localhost:5173.
 | `npm run dev` | Dev server with hot reload |
 | `npm run build` | Typecheck, build, and prerender every route into `dist/` |
 | `npm run preview` | Serve the built `dist/` locally |
+| `npm run fetch:events` | Refresh the Luma events in `src/content/events.generated.ts` |
 | `npm test` | Unit tests (Vitest) |
 | `npm run lint` | ESLint |
 | `npm run format` | Prettier |
@@ -89,6 +90,7 @@ Most copy lives in typed data files, so you do not need to touch layout code.
 | --- | --- |
 | Team members | `src/content/team.ts` |
 | Partner names | `src/content/partners.ts` |
+| Events | not edited by hand: run `npm run fetch:events` |
 | WhatsApp / LinkedIn / Luma / Substack links, contact email | `src/content/siteLinks.ts` |
 | Page titles and descriptions (what shows in Google and link previews) | `src/content/routeMeta.ts` |
 | Section wording | the matching file in `src/components/sections/` |
