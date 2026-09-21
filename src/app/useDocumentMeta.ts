@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   absoluteUrl,
+  canonicalPath,
   defaultOgImage,
   normalizePath,
   routeMeta,
@@ -41,7 +42,7 @@ function upsertCanonical(href: string) {
 
 export function applyRouteMeta(pathname: string, meta: RouteMeta) {
   const image = absoluteUrl(meta.ogImage ?? defaultOgImage);
-  const url = absoluteUrl(pathname);
+  const url = absoluteUrl(canonicalPath(pathname));
 
   document.title = meta.title;
   upsertMeta("name", "description", meta.description);

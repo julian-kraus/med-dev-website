@@ -20,6 +20,7 @@ const {
   siteOrigin,
   defaultOgImage,
   absoluteUrl,
+  canonicalPath,
 } = await import(ssrEntry.href);
 
 // Read the template exactly once. Reading it back after writing "/" would make
@@ -39,7 +40,7 @@ function escapeHtml(value) {
 }
 
 function headTags(pathname, meta) {
-  const url = absoluteUrl(pathname);
+  const url = absoluteUrl(canonicalPath(pathname));
   const image = absoluteUrl(meta.ogImage ?? defaultOgImage);
 
   return [
@@ -133,7 +134,7 @@ const indexable = prerenderRoutes.filter((route) => !route.meta.noindex);
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${indexable.map((route) => `  <url><loc>${absoluteUrl(route.path)}</loc></url>`).join("\n")}
+${indexable.map((route) => `  <url><loc>${absoluteUrl(canonicalPath(route.path))}</loc></url>`).join("\n")}
 </urlset>
 `;
 await writeFile(join(distDir, "sitemap.xml"), sitemap, "utf8");

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { appRoutes, prerenderRoutes } from "../app/routes";
-import { normalizePath, redirectRoutes, routeMeta } from "../content/routeMeta";
+import { canonicalPath, normalizePath, redirectRoutes, routeMeta } from "../content/routeMeta";
 
 // The production host serves one real file per route and 404s anything else,
 // so a route present in the router but missing from routeMeta would work in
@@ -61,5 +61,29 @@ describe("normalizePath", () => {
 
   it("leaves already-normal paths alone", () => {
     expect(normalizePath("/team")).toBe("/team");
+  });
+});
+
+describe("canonicalPath", () => {
+  // GitHub Pages 301s /team to /team/. If canonicals used the un-slashed form
+  // every page would point at a URL that redirects back to itself.
+  it("adds the trailing slash the host actually serves", () => {
+    expect(canonicalPath("/team")).toBe("/team/");
+    expect(canonicalPath("/legal/imprint")).toBe("/legal/imprint/");
+  });
+
+  it("leaves the root alone", () => {
+    expect(canonicalPath("/")).toBe("/");
+  });
+
+  it("is idempotent, so an already-slashed path does not double up", () => {
+    expect(canonicalPath("/team/")).toBe("/team/");
+    expect(canonicalPath(canonicalPath("/team"))).toBe("/team/");
+  });
+
+  it("covers every indexable route", () => {
+    for (const path of Object.keys(routeMeta)) {
+      expect(canonicalPath(path).endsWith("/"), path).toBe(true);
+    }
   });
 });

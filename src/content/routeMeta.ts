@@ -21,10 +21,21 @@ export function absoluteUrl(pathOrUrl: string) {
   return pathOrUrl.startsWith("http") ? pathOrUrl : `${siteOrigin}${pathOrUrl}`;
 }
 
-/** "/team/" and "/team" are the same route; canonicals use the un-slashed form. */
+/** "/team/" and "/team" are the same route; route lookups use the un-slashed form. */
 export function normalizePath(pathname: string) {
   const trimmed = pathname.replace(/\/+$/, "");
   return trimmed === "" ? "/" : trimmed;
+}
+
+/**
+ * The URL the host actually serves. GitHub Pages serves directories, so a
+ * request for /team is 301'd to /team/. Canonicals, og:url and the sitemap
+ * have to use that form, or every page would declare a canonical that
+ * redirects straight back to itself.
+ */
+export function canonicalPath(pathname: string) {
+  const path = normalizePath(pathname);
+  return path === "/" ? "/" : `${path}/`;
 }
 
 export const routeMeta = {

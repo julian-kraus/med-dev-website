@@ -129,10 +129,24 @@ poorly.
   it is a single point of failure for that section, and visitor IPs reach a
   third party. Replacing it would need a serverless function, which would end
   GitHub Pages portability.
-- **GitHub Pages**: asset paths are hardcoded as `/assets/...`
-  strings that Vite never rewrites, and canonicals are absolute against
-  `siteOrigin`. GitHub Pages is therefore only viable on an apex or custom
-  domain, not a `user.github.io/repo/` project page.
+- **GitHub Pages is the deploy target** (`.github/workflows/deploy.yml`), on the
+  custom domain `www.med-dev.org`. It must stay a custom domain: asset paths are
+  hardcoded `/assets/...` strings that Vite never rewrites, and canonicals are
+  absolute against `siteOrigin`, so a `user.github.io/repo/` project page would
+  break every image and every canonical.
+- **Pages cannot set response headers.** That is why the CSP and referrer policy
+  live as `<meta>` tags in `index.html` rather than in `vercel.json` — put new
+  policy there, not in the header config. Two things are unavoidably lost:
+  `X-Frame-Options`/`frame-ancestors` and `X-Content-Type-Options`, both
+  header-only. Caching is fixed at `max-age=600` for everything, including the
+  content-hashed `/build` output.
+- **`vercel.json` is inert on Pages.** It is kept so a move back to Vercel stays
+  a one-step change. It deliberately holds no CSP: the meta tag is the single
+  definition.
+- **Canonicals use the trailing-slash form** (`/team/`), because Pages 301s
+  `/team` to `/team/`. `canonicalPath()` in `routeMeta.ts` is the one place that
+  decides this, and `routes.test.ts` covers it. If the host ever changes to one
+  that serves extensionless paths directly, change it there.
 - **Scroll-driven reveal**: `.reveal` uses `animation-timeline: view()`, which
   Firefox still keeps behind a flag. There it degrades to one fade-up on load.
   Deliberate, not a bug.

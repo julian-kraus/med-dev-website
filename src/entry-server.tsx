@@ -12,6 +12,7 @@ export {
   siteOrigin,
   defaultOgImage,
   absoluteUrl,
+  canonicalPath,
 } from "./content/routeMeta";
 
 export function render(url: string) {
